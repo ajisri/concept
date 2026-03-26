@@ -1,0 +1,80 @@
+.zoomGallery {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--c-bg);
+}
+
+.header {
+  position: absolute;
+  top: var(--sp-xl); /* Move higher to avoid images */
+  left: var(--container-padding);
+  text-align: left;
+  z-index: 10;
+  opacity: 0;
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-widest);
+  color: var(--c-accent);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: var(--sp-sm);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem); /* Less overpowering size */
+  font-weight: 700;
+  line-height: 1; /* More breathable line-height */
+  letter-spacing: -0.02em; /* Optimal tracking for Display uppercase */
+  color: var(--c-text);
+  white-space: nowrap;
+  text-transform: uppercase;
+  margin-top: -8px; /* Tighter optical alignment to label */
+}
+
+.perspective {
+  position: absolute;
+  inset: 0;
+  perspective: 800px;
+  perspective-origin: center center;
+  overflow: hidden;
+}
+
+.gallery {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.item {
+  position: absolute;
+  width: clamp(180px, 22vw, 320px);
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8) contrast(1.1);
+  transition: filter 0.4s ease;
+}
+
+.item:hover img {
+  filter: brightness(1) contrast(1);
+}
+
+@media (max-width: 768px) {
+  .item {
+    width: clamp(120px, 35vw, 200px);
+  }
+}

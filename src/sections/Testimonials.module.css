@@ -1,0 +1,137 @@
+.testimonials {
+  position: relative;
+  width: 100%;
+  padding: clamp(80px, 10vw, 150px) 0;
+  background-color: var(--c-bg);
+  border-top: 1px solid var(--c-border);
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  display: grid;
+  grid-template-columns: 1fr 1.5fr; /* 2-column layout */
+  gap: var(--sp-3xl);
+  align-items: start;
+}
+
+/* ─── Left Sidebar (Sticky) ─── */
+.stickySidebar {
+  position: sticky;
+  top: clamp(80px, 15vh, 150px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+  padding-right: var(--sp-2xl);
+}
+
+.metaLabel {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: var(--ls-tighter);
+  color: var(--c-text);
+}
+
+.sectionDesc {
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--c-text-muted);
+  max-width: 300px;
+}
+
+/* ─── Right Sidebar (Scroll List) ─── */
+.scrollContent {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(80px, 10vw, 120px);
+  margin-top: 20vh; /* Start slightly below the title */
+  margin-bottom: 20vh;
+}
+
+.testimonialCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xl);
+}
+
+.quoteMark {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 10vw, 8rem);
+  color: var(--c-text-dim);
+  line-height: 0.5;
+  font-weight: 700;
+  opacity: 0.2;
+}
+
+.quoteText {
+  font-family: var(--font-sans);
+  font-size: clamp(1.5rem, 3vw, 2.8rem);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--c-text);
+  letter-spacing: -0.02em;
+}
+
+.authorMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-lg);
+  margin-top: var(--sp-xl);
+}
+
+.authorLine {
+  width: 60px;
+  height: 2px;
+  background-color: var(--c-text);
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.authorName {
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--c-text);
+  letter-spacing: var(--ls-tight);
+}
+
+.authorRole {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--c-text-muted);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+@media (max-width: 968px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .stickySidebar {
+    position: relative;
+    top: 0;
+    margin-bottom: var(--sp-3xl);
+  }
+  .scrollContent {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

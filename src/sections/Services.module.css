@@ -1,0 +1,196 @@
+.services {
+  position: relative;
+  /* GSAP will pin this wrapper, so we just design for 100vh height per tick */
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--c-bg); /* light theme */
+  overflow: hidden;
+}
+
+.stickyWrapper {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.sliderContainer {
+  display: flex;
+  height: 100vh;
+  /* Panel flex magic will force this container wide */
+  width: max-content;
+  will-change: transform;
+}
+
+/* ─── Individual Panels ─── */
+.panel {
+  width: 100vw; /* each panel strictly snaps to 100% viewport width */
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: var(--sp-2xl);
+}
+
+/* Introduction Panel */
+.introPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 var(--container-padding);
+}
+
+.introContent {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.metaLabel {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: var(--sp-md);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: var(--ls-tighter);
+  color: var(--c-text);
+  text-transform: uppercase;
+}
+
+.headingAccent {
+  font-style: normal;
+  color: var(--c-text-muted);
+  -webkit-text-stroke: 1px var(--c-text);
+}
+
+.swipeIndicator {
+  position: absolute;
+  bottom: var(--sp-3xl);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-md);
+  opacity: 0.6;
+}
+
+.swipeLine {
+  width: 100px;
+  height: 1px;
+  background-color: var(--c-text);
+}
+
+.swipeText {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+}
+
+/* Service Info Panels */
+.panelInner {
+  width: 100%;
+  max-width: var(--container-max);
+  height: 80vh; /* Leaves some margin relative to viewport */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.imageWrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Darken images significantly to let the text pop on top */
+  background: var(--c-black);
+}
+
+.imageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* A nice scale factor for parallax masking */
+  transform: scale(1.2); 
+  filter: grayscale(100%);
+  opacity: 0.8;
+  will-change: transform;
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.4) 60%,
+    transparent 100%
+  );
+  z-index: 1; /* Under text, above image */
+}
+
+.textContent {
+  position: absolute;
+  bottom: 10vh;
+  left: 5vw;
+  z-index: 2;
+  width: clamp(320px, 38vw, 600px); /* 38.2% Golden Ratio proportion relative to screen roughly */
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+  background: var(--c-bg);
+  padding: clamp(2rem, 4vw, 4rem); /* Beautiful inset breathing room */
+  border: 1px solid var(--c-border);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1); /* Subtle elevation */
+}
+
+.itemNum {
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  color: var(--c-text-dim);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+}
+
+.itemTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3.5rem); /* Scaled appropriately for headings */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--c-text);
+  line-height: 1; /* Tight line height for massive geometric headings */
+  text-transform: uppercase;
+  /* Removed aggressive word-breaking */
+}
+
+.itemDesc {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.618; /* Perfect Golden Ratio line-height for body text */
+  color: var(--c-text-muted);
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .textContent {
+    bottom: var(--sp-lg);
+    left: var(--sp-lg);
+    right: var(--sp-lg);
+    width: auto; /* Full width minus padding */
+    padding: var(--sp-xl);
+  }
+}

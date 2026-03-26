@@ -1,0 +1,213 @@
+.projects {
+  position: relative;
+  width: 100%;
+  padding: var(--sp-section) 0;
+  background-color: var(--c-bg);
+  /* hidden unconditionally masks extreme parallax images from bleeding into other sections */
+  overflow: hidden;
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  position: relative;
+  z-index: 2; /* Text sits above the floating gallery */
+}
+
+/* ─── Section Header ─── */
+.sectionHeader {
+  position: relative; /* ensure it stays in document flow or at least top-left */
+  z-index: 10; /* above the photos */
+  margin-bottom: var(--sp-3xl);
+  /* Top-left aligned label like 02 - THE VISION */
+}
+
+.metaLabel {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  color: var(--c-text-dim);
+  text-transform: uppercase;
+  display: block;
+}
+
+.sectionTitle {
+  font-family: var(--font-sans);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--c-text);
+  margin-top: var(--sp-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-tight);
+}
+
+/* ─── Center Typography (All Work 27) ─── */
+.centerWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; 
+  z-index: 10;
+}
+
+.centerBlock {
+  position: absolute;
+  top: 40vh; /* slightly higher up so it doesn't descend too far visually relative to Discover */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: max-content;
+}
+
+.heading {
+  font-family: var(--font-sans); /* Use Grotesque Sans */
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 500;
+  color: var(--c-text);
+  letter-spacing: -0.04em; /* Tight letter spacing typical for Telha */
+  display: flex;
+  align-items: flex-start;
+  line-height: 1;
+}
+
+.sup {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 400;
+  margin-left: 0.1em;
+  line-height: 1;
+  position: relative;
+  top: 0.2em; /* Align like typical superscript */
+}
+
+/* ─── Floating Collage ─── */
+.collage {
+  position: relative;
+  width: 100%;
+  height: 180vh; /* Vast vertical space to fit 12 heavily separated photos */
+}
+
+.polaroid {
+  position: absolute;
+  overflow: hidden;
+  background-color: #f4f4f4;
+  cursor: pointer;
+  z-index: 5;
+  transition: z-index 0.2s ease;
+  will-change: transform;
+}
+
+.polaroid:hover {
+  z-index: 20; /* Pull image to front on hover */
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.imageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.polaroid:hover .imageWrapper img {
+  transform: scale(1.05); /* Subtle zoom on hover */
+}
+
+.hoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hoverOverlay span {
+  font-family: var(--font-sans);
+  color: #fff;
+  font-size: var(--fs-md);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transform: translateY(10px);
+  transition: transform 0.4s ease;
+}
+
+.polaroid:hover .hoverOverlay {
+  opacity: 1;
+}
+
+.polaroid:hover .hoverOverlay span {
+  transform: translateY(0);
+}
+
+/* ─── Floating Pill Button ─── */
+.floatingPill {
+  position: sticky;
+  bottom: var(--sp-2xl);
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none; /* Let the pill wrap the content but pointer events pass */
+}
+
+.pillContent {
+  background: var(--c-text);
+  color: var(--c-bg);
+  padding: var(--sp-sm) var(--sp-lg);
+  display: inline-flex;
+  gap: var(--sp-lg);
+  border-radius: 40px; /* High pill look */
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+  pointer-events: auto; /* Re-enable pointer logic */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.pillContent:hover {
+  transform: scale(1.05);
+}
+
+.pillLabel {
+  letter-spacing: -0.02em;
+}
+
+.pillAction {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .collage {
+    height: 180vh;
+  }
+  .polaroid {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    height: 50vh !important;
+    margin-bottom: var(--sp-xl);
+  }
+  .centerBlock {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin-bottom: var(--sp-2xl);
+  }
+}

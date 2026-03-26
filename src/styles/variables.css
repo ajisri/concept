@@ -1,0 +1,89 @@
+:root {
+  /* ─── Swiss Style Typography Scale ─── */
+  --font-sans: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+  --font-display: var(--font-sans); /* 100% Sans-Serif */
+
+  /* Massive sizing for impact */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.5rem;
+  --fs-xl: 2rem;
+  --fs-2xl: clamp(2.5rem, 4vw, 3rem);
+  --fs-3xl: clamp(3rem, 6vw, 4.5rem);
+  --fs-4xl: clamp(4rem, 8vw, 6rem);
+  --fs-5xl: clamp(5rem, 10vw, 8rem);
+  --fs-hero: clamp(6rem, 16vw, 15rem); /* Extremely large */
+
+  /* Tight line heights for large text */
+  --lh-solid: 1;
+  --lh-tight: 1.05;
+  --lh-snug: 1.15;
+  --lh-normal: 1.4;
+  --lh-relaxed: 1.6;
+
+  /* Negative tracking for display text */
+  --ls-tighter: -0.04em;
+  --ls-tight: -0.02em;
+  --ls-normal: 0;
+  --ls-wide: 0.02em;
+  --ls-widest: 0.1em;
+
+  /* ─── Ultra-Premium Monochrome Light Theme ─── */
+  --c-bg: #ffffff;
+  --c-bg-elevated: #f4f4f4;
+  --c-bg-card: #ececec;
+  --c-surface: #e5e5e5;
+  
+  --c-text: #000000;
+  --c-text-muted: #555555;
+  --c-text-dim: #888888;
+
+  --c-border: rgba(0, 0, 0, 0.1);
+  --c-border-hover: rgba(0, 0, 0, 0.25);
+
+  /* A sharper, less "corporate" accent, e.g., a dark/silver or brutalist raw color */
+  --c-accent: #0f0f0f;
+  --c-accent-dark: #333333;
+
+  --c-white: #ffffff;
+  --c-black: #000000;
+
+  /* ─── Spacing (Intentional & Ample) ─── */
+  --sp-xs: 0.5rem;
+  --sp-sm: 1rem;
+  --sp-md: 1.5rem;
+  --sp-lg: 2rem;
+  --sp-xl: 4rem;
+  --sp-2xl: 8rem;
+  --sp-3xl: 12rem;
+  --sp-section: clamp(8rem, 15vh, 16rem);
+
+  --container-max: 1600px;
+  --container-padding: clamp(1.5rem, 5vw, 5vw);
+
+  /* ─── Motion & Easing (Pro Max standards) ─── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-custom: cubic-bezier(0.87, 0, 0.13, 1); /* Olivier Larose style snap */
+
+  --tr-fast: 0.2s var(--ease-out-expo);
+  --tr-normal: 0.5s var(--ease-custom);
+  --tr-slow: 0.8s var(--ease-custom);
+
+  /* ─── Sharp, Consistent Radii ─── */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 0px; /* Brutalist/Architectural sharp edges */
+  --radius-lg: 0px;
+  --radius-full: 9999px;
+  
+  --z-base: 1;
+  --z-content: 10;
+  --z-nav: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-cursor: 400;
+  --z-preloader: 999;
+}

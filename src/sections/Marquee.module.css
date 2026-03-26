@@ -1,0 +1,54 @@
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--c-bg);
+  padding: var(--sp-2xl) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  border-top: 1px solid var(--c-border);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.track {
+  display: flex;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.trackReverse {
+  direction: rtl;
+}
+
+.word {
+  font-family: var(--font-display);
+  font-size: clamp(8rem, 20vw, 18rem); /* Completely massive */
+  font-weight: 700;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--c-text); /* Solid thick outline */
+  letter-spacing: var(--ls-tighter);
+  padding: 0 var(--sp-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-lg);
+  transition: color 0.4s ease, -webkit-text-stroke-color 0.4s ease;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.word:hover {
+  color: var(--c-text);
+  -webkit-text-stroke-color: var(--c-text);
+}
+
+.dot {
+  font-size: var(--fs-xs);
+  color: var(--c-text-dim);
+}
+
+@media (max-width: 768px) {
+  .word {
+    font-size: var(--fs-3xl);
+  }
+}
