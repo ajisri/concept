@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import styles from './Services.module.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -32,7 +33,7 @@ const SERVICES = [
     desc: 'Spaces that inspire. From material selection to lighting design, every element is curated to serve the human experience.',
     image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=80',
   },
-];
+] as const;
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -41,8 +42,15 @@ export default function Services() {
   useEffect(() => {
     if (!sectionRef.current || !containerRef.current) return;
 
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
     const ctx = gsap.context(() => {
-      const panels = gsap.utils.toArray('.js-service-panel');
+      if (prefersReducedMotion) return;
+
+      // Typed as Element[] — no more `any`
+      const panels = gsap.utils.toArray<Element>('.js-service-panel');
       const container = containerRef.current!;
 
       // Olivier Larose Horizontal Scroll technique
@@ -52,20 +60,21 @@ export default function Services() {
         scrollTrigger: {
           trigger: sectionRef.current,
           pin: true,
+          pinType: 'transform',
           scrub: 1,
           snap: {
             snapTo: 1 / (panels.length - 1),
             duration: { min: 0.2, max: 0.8 },
             delay: 0.1,
-            ease: "power2.inOut"
+            ease: 'power2.inOut',
           },
           end: () => '+=' + container.offsetWidth,
         },
       });
 
-      // Subtle parallax on internal images
-      panels.forEach((panel: any) => {
-        const img = panel.querySelector('img');
+      // Subtle parallax on internal images — typed properly
+      panels.forEach((panel) => {
+        const img = (panel as HTMLElement).querySelector('img');
         if (img) {
           gsap.to(img, {
             xPercent: 15,
@@ -88,7 +97,7 @@ export default function Services() {
     <section ref={sectionRef} className={styles.services} id="services">
       <div className={styles.stickyWrapper}>
         <div ref={containerRef} className={styles.sliderContainer}>
-          
+
           {/* Title Panel */}
           <div className={`${styles.panel} ${styles.introPanel} js-service-panel`}>
             <div className={styles.introContent}>
@@ -98,8 +107,8 @@ export default function Services() {
                 <span className={styles.headingAccent}>SHAPES SKYLINES.</span>
               </h2>
             </div>
-            
-            <div className={styles.swipeIndicator}>
+
+            <div className={styles.swipeIndicator} aria-hidden="true">
               <div className={styles.swipeLine}></div>
               <span className={styles.swipeText}>SWIPE TO EXPLORE →</span>
             </div>
@@ -109,14 +118,22 @@ export default function Services() {
           {SERVICES.map((service) => (
             <div key={service.num} className={`${styles.panel} js-service-panel`}>
               <div className={styles.panelInner}>
-                
-                {/* Image taking up massive vertical space */}
+
+                {/* Image with next/image */}
                 <div className={styles.imageWrapper}>
-                  <img src={service.image} alt={service.title} loading="lazy" />
-                  <div className={styles.imageOverlay} />
+                  <Image
+                    src={service.image}
+                    alt={`${service.title} — Konstrüksi service`}
+                    fill
+                    sizes="100vw"
+                    quality={85}
+                    loading="lazy"
+                    className={styles.serviceImage}
+                  />
+                  <div className={styles.imageOverlay} aria-hidden="true" />
                 </div>
 
-                {/* Content block overlapping or aligning to grid */}
+                {/* Content block */}
                 <div className={styles.textContent}>
                   <span className={styles.itemNum}>{service.num}</span>
                   <h3 className={styles.itemTitle}>{service.title}</h3>

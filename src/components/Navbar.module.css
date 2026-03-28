@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 999;
+  z-index: 10000; /* above .menu (9999) so burger stays clickable */
   padding: var(--sp-md) var(--container-padding);
   pointer-events: none; /* Let clicks pass through empty areas */
 }
@@ -22,13 +22,12 @@
   letter-spacing: var(--ls-widest);
   color: var(--c-text);
   text-decoration: none;
-  mix-blend-mode: difference; /* Highly aesthetic on dark/light cross */
-  color: #fff; /* When inverted on light bg, looks black */
+  text-transform: uppercase;
 }
 
 .logoAccent {
-  color: var(--c-black);
-  -webkit-text-stroke: 1px #fff;
+  display: inline-block;
+  color: var(--c-text);
 }
 
 /* ─── Burger ─── */
@@ -47,20 +46,19 @@
   gap: 6px;
   z-index: 1000;
   transition: background 0.3s ease;
-  mix-blend-mode: difference;
 }
 
 .burgerLine {
   width: 24px;
   height: 2px;
-  background-color: #fff; /* blend inversion */
+  background-color: var(--c-text);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: center;
 }
 
 .burgerOpen .burgerLine:nth-child(1) {
   transform: translateY(4px) rotate(45deg);
-  background-color: var(--c-text); /* Menu bg is light */
+  background-color: var(--c-text);
 }
 
 .burgerOpen .burgerLine:nth-child(2) {
@@ -78,8 +76,8 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--c-bg); /* Pure white menu bg */
-  z-index: 998;
+  background-color: var(--c-bg);
+  z-index: 9999; /* above GSAP ScrollTrigger pinned sections and Lenis wrapper */
   display: flex;
   flex-direction: column;
   justify-content: center;

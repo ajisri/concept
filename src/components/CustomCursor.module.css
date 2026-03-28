@@ -1,35 +1,56 @@
+/* All positions are set via JS transform: translate(x, y) translate(-50%, -50%) */
+
 .cursor {
   position: fixed;
-  top: -5px;
-  left: -5px;
-  width: 10px;
-  height: 10px;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--c-white);
+  background: var(--c-text);
   pointer-events: none;
   z-index: var(--z-cursor);
-  mix-blend-mode: difference;
+  /* No CSS transitions — GSAP handles everything */
+  will-change: transform;
 }
 
 .follower {
   position: fixed;
-  top: -20px;
-  left: -20px;
-  width: 40px;
-  height: 40px;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1.5px solid var(--c-text);
   pointer-events: none;
   z-index: calc(var(--z-cursor) - 1);
-  mix-blend-mode: difference;
-  transition: border-color 0.3s ease;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Smooth background transitions when hover active */
+  transition: background-color 0.3s ease;
 }
 
-.follower.active {
-  border-color: var(--c-white);
-  background: rgba(255, 255, 255, 0.05);
+/* When a label is present (VIEW, DRAG, OPEN), the follower fills */
+.follower:has(.label:not(:empty)) {
+  background: var(--c-text);
+  border-color: var(--c-text);
 }
 
+.label {
+  font-family: var(--font-sans);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--c-bg);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Hide on touch/coarse pointer devices */
 @media (hover: none), (pointer: coarse) {
   .cursor,
   .follower {

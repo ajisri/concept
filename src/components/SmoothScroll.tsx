@@ -1,43 +1,99 @@
 'use client';
 
-import { useEffect, useRef, ReactNode } from 'react';
-import Lenis from '@studio-freight/lenis';
+import { useEffect, useRef } from 'react';
+import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface SmoothScrollProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null);
+  // Wrapper ref for velocity skew — applied to the entire page content
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    if (prefersReducedMotion) {
+      ScrollTrigger.normalizeScroll(false);
+      return;
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       touchMultiplier: 2,
-      infinite: false,
     });
 
     lenisRef.current = lenis;
-
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
+    // ─── Velocity-Based Skew (Awwwards signature effect) ───────────────────
+    // Track scroll velocity and apply skewY to the page wrapper.
+    // This makes the entire page feel "elastic" — content leans forward when
+    // scrolling fast, then springs back when stopping.
+    let currentSkew = 0;
+    let lastScrollY = 0;
+    let velocity = 0;
+    const maxSkew = 4; // degrees — a subtle but noticeable lean
+    const skewLerpFactor = 0.08; // how fast skew catches up to velocity
+
+    const skewScrollContent = (scrollY: number) => {
+      velocity = scrollY - lastScrollY;
+      lastScrollY = scrollY;
+    };
+
+    lenis.on('scroll', ({ scroll }: { scroll: number }) => {
+      skewScrollContent(scroll);
     });
+
+    const tick = (time: number) => {
+      lenis.raf(time * 1000);
+
+      // Lerp toward target skew
+      const targetSkew = gsap.utils.clamp(-maxSkew, maxSkew, velocity * 0.04);
+      currentSkew += (targetSkew - currentSkew) * skewLerpFactor;
+
+      if (wrapperRef.current && Math.abs(currentSkew) > 0.001) {
+        // Apply on the wrapper — CSS: transform-style:flat + backface-visibility:hidden
+        // prevents subpixel rendering artifacts on children
+        wrapperRef.current.style.transform = `skewY(${currentSkew.toFixed(3)}deg)`;
+      } else if (wrapperRef.current) {
+        wrapperRef.current.style.transform = '';
+      }
+    };
+
+    gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove((time) => {
-        lenis.raf(time * 1000);
-      });
+      gsap.ticker.remove(tick);
+      if (wrapperRef.current) {
+        wrapperRef.current.style.transform = '';
+      }
     };
   }, []);
 
-  return <>{children}</>;
+  return (
+    <div
+      ref={wrapperRef}
+      style={{
+        // Critical: backface-visibility prevents "shimmering" text during skew
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        // will-change: transform enables GPU compositing — smoother skew
+        willChange: 'transform',
+      }}
+    >
+      {children}
+    </div>
+  );
 }

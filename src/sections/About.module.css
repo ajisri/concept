@@ -45,14 +45,19 @@
   width: 100%;
   height: clamp(500px, 60vh, 800px);
   overflow: hidden;
+  position: relative; /* required for next/image fill */
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); /* initial state for GSAP reveal */
+}
+
+.imageInner {
+  position: absolute;
+  inset: -15% 0; /* extra vertical space for parallax travel */
+  will-change: transform;
 }
 
 .image {
-  width: 100%;
-  height: 120%;
   object-fit: cover;
-  will-change: transform;
-  filter: grayscale(100%) contrast(1.2); /* Hyper-architectural look */
+  filter: grayscale(100%) contrast(1.2);
 }
 
 .textBlock {
@@ -73,13 +78,13 @@
 .heading {
   font-family: var(--font-display);
   font-size: clamp(3rem, 7vw, 6.5rem);
-  font-weight: 700; /* Bold Grotesque */
+  font-weight: 700;
   line-height: 0.9;
   letter-spacing: var(--ls-tighter);
   color: var(--c-text);
-  opacity: 0;
   text-transform: uppercase;
   margin-bottom: var(--sp-sm);
+  /* No opacity:0 — RevealText handles visibility via translateY on .lineInner */
 }
 
 .headingAccent {
@@ -107,7 +112,7 @@
   gap: var(--sp-2xl);
   margin-top: var(--sp-lg);
   padding-top: var(--sp-lg);
-  border-top: 1px solid var(--c-black);
+  border-top: 1px solid var(--c-border);
 }
 
 .stat {

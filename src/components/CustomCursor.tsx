@@ -1,84 +1,148 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './CustomCursor.module.css';
 import { gsap } from 'gsap';
+
+type CursorState = 'default' | 'hover' | 'drag' | 'view' | 'link';
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const followerRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
+    const touchDevice =
+      'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsTouch(touchDevice);
+  }, []);
+
+  useEffect(() => {
+    if (isTouch) return;
+
     const cursor = cursorRef.current;
     const follower = followerRef.current;
+    const label = labelRef.current;
+    if (!cursor || !follower || !label) return;
 
-    if (!cursor || !follower) return;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    // ─── Mouse position tracking with lerp ─────────────────────────────────
+    // Instead of GSAP, we manually lerp in a RAF loop for precise control
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+    let followerX = mouseX;
+    let followerY = mouseY;
+    let rafId: number;
 
     const onMouseMove = (e: MouseEvent) => {
-      gsap.to(cursor, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.1,
-        ease: 'power2.out',
-      });
-      gsap.to(follower, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.5,
-        ease: 'power2.out',
-      });
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
-    const onMouseEnterInteractive = () => {
-      gsap.to(cursor, { scale: 0, duration: 0.3 });
-      gsap.to(follower, {
-        scale: 3,
-        duration: 0.4,
-        ease: 'power2.out',
-      });
-      follower.classList.add(styles.active);
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    const animate = () => {
+      // Cursor: very fast (near-instant)
+      cursorX = lerp(cursorX, mouseX, 0.85);
+      cursorY = lerp(cursorY, mouseY, 0.85);
+      cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
+
+      // Follower: slower, creates the "trailing" effect
+      followerX = lerp(followerX, mouseX, 0.1);
+      followerY = lerp(followerY, mouseY, 0.1);
+      follower.style.transform = `translate(${followerX}px, ${followerY}px) translate(-50%, -50%)`;
+
+      rafId = requestAnimationFrame(animate);
     };
 
-    const onMouseLeaveInteractive = () => {
-      gsap.to(cursor, { scale: 1, duration: 0.3 });
-      gsap.to(follower, {
-        scale: 1,
-        duration: 0.4,
-        ease: 'power2.out',
-      });
-      follower.classList.remove(styles.active);
+    animate();
+
+    // ─── Context-Aware Cursor States ─────────────────────────────────────
+    const setState = (state: CursorState) => {
+      follower.dataset.state = state;
+
+      switch (state) {
+        case 'hover':
+          gsap.to(follower, { scale: 2.5, duration: 0.4, ease: 'power2.out' });
+          gsap.to(cursor, { scale: 0, duration: 0.2 });
+          label.textContent = '';
+          break;
+        case 'view':
+          gsap.to(follower, { scale: 4, duration: 0.4, ease: 'power2.out' });
+          gsap.to(cursor, { scale: 0, duration: 0.2 });
+          label.textContent = 'VIEW';
+          break;
+        case 'drag':
+          gsap.to(follower, { scale: 3.5, duration: 0.4, ease: 'power2.out' });
+          gsap.to(cursor, { scale: 0, duration: 0.2 });
+          label.textContent = 'DRAG';
+          break;
+        case 'link':
+          gsap.to(follower, { scale: 2, duration: 0.4, ease: 'power2.out' });
+          gsap.to(cursor, { scale: 0, duration: 0.2 });
+          label.textContent = 'OPEN';
+          break;
+        default:
+          gsap.to(follower, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.5)' });
+          gsap.to(cursor, { scale: 1, duration: 0.3 });
+          label.textContent = '';
+      }
     };
+
+    // Register interactive elements with cursor data attributes
+    const bindElement = (el: Element) => {
+      const cursorType = (el as HTMLElement).dataset.cursor as CursorState | undefined;
+
+      // Determine state from data attribute or element type
+      const getState = (): CursorState => {
+        if (cursorType) return cursorType;
+        if (el.tagName === 'A') return 'link';
+        if (el.tagName === 'BUTTON') return 'hover';
+        return 'hover';
+      };
+
+      const enter = () => setState(getState());
+      const leave = () => setState('default');
+      el.addEventListener('mouseenter', enter);
+      el.addEventListener('mouseleave', leave);
+      return () => {
+        el.removeEventListener('mouseenter', enter);
+        el.removeEventListener('mouseleave', leave);
+      };
+    };
+
+    const interactiveEls = document.querySelectorAll(
+      'a, button, [data-cursor]'
+    );
+    const cleanups = Array.from(interactiveEls).map(bindElement);
 
     window.addEventListener('mousemove', onMouseMove);
 
-    const interactiveElements = document.querySelectorAll(
-      'a, button, [data-cursor-hover]'
-    );
-    interactiveElements.forEach((el) => {
-      el.addEventListener('mouseenter', onMouseEnterInteractive);
-      el.addEventListener('mouseleave', onMouseLeaveInteractive);
-    });
-
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      interactiveElements.forEach((el) => {
-        el.removeEventListener('mouseenter', onMouseEnterInteractive);
-        el.removeEventListener('mouseleave', onMouseLeaveInteractive);
-      });
+      cancelAnimationFrame(rafId);
+      cleanups.forEach((fn) => fn());
     };
-  }, []);
+  }, [isTouch]);
 
-  // Only show custom cursor on non-touch devices
-  const isTouchDevice =
-    typeof window !== 'undefined' &&
-    ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
-  if (typeof window !== 'undefined' && isTouchDevice) return null;
+  if (isTouch) return null;
 
   return (
     <>
+      {/* The dot (innermost, fast) */}
       <div ref={cursorRef} className={styles.cursor} />
-      <div ref={followerRef} className={styles.follower} />
+
+      {/* The ring (follower, slow, context-aware) */}
+      <div ref={followerRef} className={styles.follower}>
+        <span ref={labelRef} className={styles.label} />
+      </div>
     </>
   );
 }

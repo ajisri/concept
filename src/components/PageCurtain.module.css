@@ -1,0 +1,23 @@
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 99999; /* above everything including preloader */
+  background: var(--c-text); /* solid black */
+  display: none; /* hidden by default, GSAP toggles */
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  will-change: transform;
+  /* Start off-screen above viewport */
+  transform: translateY(-100%);
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: var(--ls-widest);
+  color: var(--c-bg);
+  text-transform: uppercase;
+  opacity: 0.4;
+}

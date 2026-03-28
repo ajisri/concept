@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import styles from './About.module.css';
+import RevealText from '@/components/RevealText';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -16,13 +18,18 @@ const STATS = [
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
-  const imageInnerRef = useRef<HTMLImageElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const textLinesRef = useRef<HTMLParagraphElement[]>([]);
+  const imageInnerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
   const statsRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
     const ctx = gsap.context(() => {
+      if (prefersReducedMotion) return;
+
       // Image clip-path reveal
       gsap.fromTo(
         imageRef.current,
@@ -38,7 +45,7 @@ export default function About() {
         }
       );
 
-      // Parallax on the inner image
+      // Parallax on the inner image wrapper
       gsap.to(imageInnerRef.current, {
         yPercent: -15,
         scrollTrigger: {
@@ -49,36 +56,20 @@ export default function About() {
         },
       });
 
-      // Heading slide in
+      // Body text fade in
       gsap.fromTo(
-        headingRef.current,
-        { y: 60, opacity: 0 },
+        textRef.current,
+        { y: 30, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.8,
           ease: 'power3.out',
-          scrollTrigger: { trigger: headingRef.current, start: 'top 80%' },
+          scrollTrigger: { trigger: textRef.current, start: 'top 85%' },
         }
       );
 
-      // Text lines stagger
-      textLinesRef.current.forEach((line, i) => {
-        gsap.fromTo(
-          line,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: 'power3.out',
-            delay: i * 0.1,
-            scrollTrigger: { trigger: line, start: 'top 85%' },
-          }
-        );
-      });
-
-      // Stats counter animation
+      // Stats reveal stagger
       statsRef.current.forEach((stat) => {
         gsap.fromTo(
           stat,
@@ -104,22 +95,34 @@ export default function About() {
           <div className={styles.metaCol}>
             <span className={styles.metaLabel}>02 — THE VISION</span>
           </div>
-          
-          <div className={styles.textCol}>
-            <h2 className={styles.heading} ref={headingRef}>
-              WE DON'T JUST BUILD <br />
-              <span className={styles.headingAccent}>WE ENGINEER REALITY.</span>
-            </h2>
 
-            <p className={styles.text} ref={(el) => { if (el) textLinesRef.current[0] = el; }}>
-              Our methodology is rooted in absolute precision and uncompromising structural integrity. From brutalist concrete forms to soaring geometric glass facades, we redefine the modern skyline with a dedication to timeless endurance. 
+          <div className={styles.textCol}>
+            <RevealText
+              as="h2"
+              lines={["WE DON'T JUST BUILD", 'WE ENGINEER REALITY.']}
+              className={styles.heading}
+              stagger={0.1}
+              duration={1}
+              start="top 80%"
+            />
+
+            <p
+              className={styles.text}
+              ref={textRef}
+            >
+              Our methodology is rooted in absolute precision and uncompromising
+              structural integrity. From brutalist concrete forms to soaring
+              geometric glass facades, we redefine the modern skyline with a
+              dedication to timeless endurance.
             </p>
 
             <div className={styles.stats}>
               {STATS.map((stat, i) => (
                 <div
                   key={stat.label}
-                  ref={(el) => { if (el) statsRef.current[i] = el; }}
+                  ref={(el) => {
+                    if (el) statsRef.current[i] = el;
+                  }}
                   className={styles.stat}
                 >
                   <span className={styles.statNumber}>{stat.number}</span>
@@ -130,13 +133,18 @@ export default function About() {
           </div>
         </div>
 
-        <div className={styles.imageWrapper} ref={imageRef}>
-          <img
-            ref={imageInnerRef}
-            src="https://images.pexels.com/photos/1105019/pexels-photo-1105019.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt="Abstract architecture geometric lines"
-            className={styles.image}
-          />
+        {/* Full-bleed architectural image with parallax */}
+        <div className={styles.imageWrapper} ref={imageRef} data-cursor="view">
+          <div ref={imageInnerRef} className={styles.imageInner}>
+            <Image
+              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1600&q=85"
+              alt="Architectural blueprint and concrete structure — geometric precision"
+              fill
+              sizes="100vw"
+              quality={85}
+              className={styles.image}
+            />
+          </div>
         </div>
       </div>
     </section>

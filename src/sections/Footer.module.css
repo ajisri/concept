@@ -1,8 +1,8 @@
 .footer {
-  padding: var(--sp-3xl) 0 var(--sp-xl);
   background: var(--c-bg);
   border-top: 1px solid var(--c-border);
-  opacity: 0;
+  /* Remove initial opacity:0 — GSAP handles the entrance */
+  overflow: hidden;
 }
 
 .container {
@@ -11,40 +11,75 @@
   padding: 0 var(--container-padding);
 }
 
-.top {
+/* ─── Giant Brand Strip ─── */
+.brandStrip {
+  padding: var(--sp-2xl) 0 var(--sp-xl);
+  border-bottom: 1px solid var(--c-border);
+  overflow: hidden;
+}
+
+.bigBrand {
+  display: flex;
+  flex-wrap: nowrap;
+  text-decoration: none;
+  /* Fluid font: fills the container width */
+  font-size: clamp(4rem, 11.5vw, 14rem);
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: var(--ls-tighter);
+  color: var(--c-text);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: opacity 0.4s ease;
+}
+
+.bigBrand:hover {
+  opacity: 0.5;
+}
+
+/* Each char wrapper = overflow:hidden mask slot */
+.brandCharWrapper {
+  display: inline-block;
+  overflow: hidden;
+  /* Extra descender space */
+  padding-bottom: 0.15em;
+  margin-bottom: -0.1em;
+}
+
+.brandChar {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ─── Info Grid ─── */
+.grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: var(--sp-2xl);
-  padding-bottom: var(--sp-3xl);
+  padding: var(--sp-2xl) 0;
   border-bottom: 1px solid var(--c-border);
 }
 
 .brandCol {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-md);
-}
-
-.logo {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  font-weight: 300;
-  letter-spacing: var(--ls-tight);
-  color: var(--c-text);
-  transition: color var(--tr-fast);
-  text-transform: uppercase;
-}
-
-.logoAccent {
-  color: var(--c-accent);
+  gap: var(--sp-lg);
 }
 
 .tagline {
   font-family: var(--font-sans);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-md);
+  font-weight: 400;
   color: var(--c-text-muted);
   line-height: var(--lh-relaxed);
-  max-width: 300px;
+}
+
+.address {
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+  line-height: var(--lh-relaxed);
 }
 
 .linksCol {
@@ -55,39 +90,59 @@
 
 .colTitle {
   font-family: var(--font-sans);
-  font-size: var(--fs-sm);
-  font-weight: 600;
+  font-size: var(--fs-xs);
+  font-weight: 700;
   color: var(--c-text);
   text-transform: uppercase;
   letter-spacing: var(--ls-widest);
   margin-bottom: var(--sp-sm);
 }
 
+/* ─── Hover Slide Link ─── */
 .link {
+  display: inline-block;
+  /* Fixed height = exactly one line — hides the second copy */
+  height: 1.4em;
+  overflow: hidden;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.linkInner {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.link:hover .linkInner {
+  transform: translateY(-50%);
+}
+
+.linkDefault,
+.linkHover {
+  display: block;
   font-family: var(--font-sans);
   font-size: var(--fs-sm);
+  font-weight: 400;
   color: var(--c-text-muted);
-  transition: color var(--tr-fast);
+  white-space: nowrap;
+  padding: 2px 0;
 }
 
-.link:hover {
-  color: var(--c-accent);
+.linkHover {
+  color: var(--c-text); /* Hover copy is darker — feels "active" */
+  font-weight: 500;
 }
 
-/* ─── Bottom ─── */
+/* ─── Bottom Bar ─── */
 .bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: var(--sp-xl);
+  padding: var(--sp-xl) 0;
 }
 
-.copy {
-  font-family: var(--font-sans);
-  font-size: var(--fs-xs);
-  color: var(--c-text-dim);
-}
-
+.copy,
 .credit {
   font-family: var(--font-sans);
   font-size: var(--fs-xs);
@@ -95,15 +150,19 @@
   letter-spacing: var(--ls-wide);
 }
 
+/* ─── Responsive ─── */
 @media (max-width: 968px) {
-  .top {
+  .grid {
     grid-template-columns: 1fr 1fr;
     gap: var(--sp-xl);
+  }
+  .bigBrand {
+    font-size: clamp(3rem, 10vw, 6rem);
   }
 }
 
 @media (max-width: 480px) {
-  .top {
+  .grid {
     grid-template-columns: 1fr;
   }
   .bottom {

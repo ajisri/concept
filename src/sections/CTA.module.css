@@ -2,6 +2,7 @@
   padding: clamp(8rem, 16vh, 16rem) 0;
   position: relative;
   background: var(--c-bg);
+  border-top: 1px solid var(--c-border);
 }
 
 .container {
@@ -16,7 +17,7 @@
 .topRow {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-md);
+  gap: var(--sp-lg);
 }
 
 .metaLabel {
@@ -28,75 +29,116 @@
   text-transform: uppercase;
 }
 
+/* Heading styled via RevealText component's className */
 .heading {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-size: clamp(4rem, 9vw, 10rem);
   font-weight: 700;
-  line-height: 0.85;
+  line-height: 0.9;
   color: var(--c-text);
   letter-spacing: var(--ls-tighter);
-  opacity: 0;
   text-transform: uppercase;
 }
 
 .headingAccent {
-  font-style: normal;
-  color: var(--c-text-muted);
-  -webkit-text-stroke: 1px var(--c-text);
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--c-text);
 }
 
-/* ─── Brutalist Button ─── */
+/* ─── Kinetic Stats Strip ─── */
+.statsStrip {
+  display: flex;
+  gap: var(--sp-2xl);
+  padding: var(--sp-xl) 0;
+  border-top: 1px solid var(--c-border);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+}
+
+.statNum {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: var(--ls-tighter);
+  line-height: 1;
+  color: var(--c-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+}
+
+/* ─── Magnetic Liquid Fill Button ─── */
 .btn {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: flex-start;
   width: 100%;
-  padding: var(--sp-2xl) 0;
-  border-top: 1px solid var(--c-text);
-  border-bottom: 1px solid var(--c-text);
+  padding: var(--sp-xl) 0;
+  border-top: 1.5px solid var(--c-text);
+  border-bottom: 1.5px solid var(--c-text);
   color: var(--c-text);
   text-decoration: none;
-  cursor: pointer;
-  opacity: 0;
-  transition: padding var(--tr-fast);
+  cursor: none; /* Custom cursor handles it */
   will-change: transform;
+  overflow: hidden; /* Contains the liquid fill */
 }
 
-.btn:hover {
+/* Liquid fill: hidden by default (scaleY:0), animates in on hover */
+.btnFill {
+  position: absolute;
+  inset: 0;
   background: var(--c-text);
-  color: var(--c-bg);
-  padding-left: var(--sp-lg);
-  padding-right: var(--sp-lg);
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  will-change: transform;
+  pointer-events: none;
 }
 
+/* Text and arrow must sit above the fill */
 .btnInner {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  will-change: transform;
+  mix-blend-mode: difference; /* Text inverts over the black fill */
+  color: #fff; /* mix-blend-mode: difference makes this appear black on white bg, white on black fill */
 }
 
 .btnText {
   font-family: var(--font-sans);
-  font-size: var(--fs-3xl);
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
   font-weight: 700;
   letter-spacing: var(--ls-tighter);
   text-transform: uppercase;
 }
 
 .btnArrow {
-  font-size: var(--fs-4xl);
-  transition: transform 0.4s var(--ease-out-expo);
+  font-size: clamp(2rem, 5vw, 4rem);
+  will-change: transform;
 }
 
-.btn:hover .btnArrow {
-  transform: translateX(20px);
-}
-
+/* ─── Responsive ─── */
 @media (max-width: 768px) {
-  .btnText {
-    font-size: var(--fs-xl);
+  .statsStrip {
+    flex-direction: column;
+    gap: var(--sp-lg);
+  }
+
+  .heading {
+    font-size: clamp(3rem, 12vw, 6rem);
   }
 }

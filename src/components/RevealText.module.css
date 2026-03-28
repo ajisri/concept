@@ -1,0 +1,19 @@
+/* ─── Line Wrapper: the "slot" that masks the text ─── */
+.lineWrapper {
+  display: block;
+  overflow: hidden;
+  /* Extra padding below so descenders (g, p, y) don't clip */
+  padding-bottom: 0.12em;
+  /* Negative margin compensates for the padding */
+  margin-bottom: -0.12em;
+}
+
+/* ─── Inner text: this is what actually moves ─── */
+.lineInner {
+  display: block;
+  /* NO initial CSS transform here — GSAP handles the from-state.
+     Setting it in CSS caused ScrollTrigger to miscalculate positions
+     when the element was off-screen. GSAP set() runs synchronously
+     before first paint when the component mounts. */
+  will-change: transform;
+}
