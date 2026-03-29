@@ -123,30 +123,52 @@
 .hoverOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 50%);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  padding: var(--sp-xl);
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hoverOverlay span {
+.hoverSlot {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 0.25rem;
+}
+
+.hoverText,
+.hoverSubtitle {
   font-family: var(--font-sans);
   color: #fff;
+  transform: translateY(110%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.hoverText {
   font-size: var(--fs-md);
   font-weight: 500;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
-  transform: translateY(10px);
-  transition: transform 0.4s ease;
+}
+
+.hoverSubtitle {
+  font-size: calc(var(--fs-xs) * 0.9);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  transition-delay: 0.05s;
 }
 
 .polaroid:hover .hoverOverlay {
   opacity: 1;
 }
 
-.polaroid:hover .hoverOverlay span {
+.polaroid:hover .hoverText,
+.polaroid:hover .hoverSubtitle {
   transform: translateY(0);
 }
 
@@ -190,22 +212,51 @@
 
 @media (max-width: 768px) {
   .collage {
-    height: 180vh;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    gap: var(--sp-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--sp-xl);
+    scrollbar-width: none;
+    /* Make negative margins to allow full screen bleed on scroll */
+    margin-left: calc(var(--container-padding) * -1);
+    margin-right: calc(var(--container-padding) * -1);
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+  }
+  .collage::-webkit-scrollbar {
+    display: none;
   }
   .polaroid {
     position: relative !important;
+    transform: none !important;
     top: auto !important;
     left: auto !important;
     right: auto !important;
-    width: 100% !important;
-    height: 50vh !important;
-    margin-bottom: var(--sp-xl);
+    flex: 0 0 75vw !important; /* Optimize object size */
+    width: 75vw !important;
+    height: 100vw !important;
+    aspect-ratio: auto;
+    scroll-snap-align: center;
+    margin-bottom: 0;
+    border-radius: var(--radius-sm);
+  }
+  .centerWrapper {
+    position: relative;
+    height: auto;
+    margin: var(--sp-lg) 0 var(--sp-xl);
   }
   .centerBlock {
     position: relative;
     top: auto;
     left: auto;
     transform: none;
-    margin-bottom: var(--sp-2xl);
+    text-align: left;
+  }
+  .heading {
+    font-size: clamp(2.5rem, 12vw, 4rem);
   }
 }

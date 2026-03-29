@@ -4,18 +4,20 @@ import { useEffect, useRef } from 'react';
 import styles from './Marquee.module.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLanguage } from '@/store/settings';
+import { dict } from '@/lib/dictionary';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const WORDS = [
+  'PERMANENCE',
+  'MATERIALITY',
+  'MONOLITH',
+  'PRESENCE',
+  'ENDURANCE',
+  'GRAVITY',
   'PRECISION',
-  'CONCRETE',
-  'VISION',
-  'ARCHITECTURE',
-  'LEGACY',
-  'STRUCTURE',
-  'INNOVATION',
-  'CRAFT',
+  'BRUTALISM',
 ];
 
 export default function Marquee() {
@@ -98,8 +100,11 @@ export default function Marquee() {
     };
   }, []);
 
+  const { lang } = useLanguage();
+  const words = dict[lang as 'en' | 'id']?.marquee || dict.en.marquee;
+
   const renderWords = () =>
-    [...WORDS, ...WORDS, ...WORDS].map((word, i) => (
+    [...words, ...words, ...words].map((word, i) => (
       <span key={i} className={styles.word} data-cursor="drag">
         {word}
         <span className={styles.dot} aria-hidden="true">●</span>

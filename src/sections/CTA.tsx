@@ -146,7 +146,7 @@ export default function CTA() {
           {/* RevealText mask reveal for the CTA heading */}
           <RevealText
             as="h2"
-            lines={["LET'S BUILD", 'SOMETHING', 'EXTRAORDINARY.']}
+            lines={["LET'S ENGINEER", 'YOUR STRATEGIC', 'CATALYST.']}
             className={styles.heading}
             stagger={0.12}
             duration={1}
@@ -158,15 +158,15 @@ export default function CTA() {
         <div className={styles.statsStrip}>
           <div className={styles.stat}>
             <div ref={counterRef} className={styles.statNum}>0</div>
-            <span className={styles.statLabel}>Projects Delivered</span>
+            <span className={styles.statLabel}>Strategic Solutions</span>
           </div>
           <div className={styles.stat}>
             <div className={styles.statNum}>25+</div>
-            <span className={styles.statLabel}>Years Experience</span>
+            <span className={styles.statLabel}>Years of Innovation</span>
           </div>
           <div className={styles.stat}>
-            <div className={styles.statNum}>98%</div>
-            <span className={styles.statLabel}>Client Satisfaction</span>
+            <div className={styles.statNum}>150%</div>
+            <span className={styles.statLabel}>Average ROI Growth</span>
           </div>
         </div>
 
@@ -182,7 +182,7 @@ export default function CTA() {
           <span ref={fillRef} className={styles.btnFill} aria-hidden="true" />
 
           <div className={styles.btnInner}>
-            <span className={styles.btnText}>GET IN TOUCH</span>
+            <span className={styles.btnText}>START THE JOURNEY</span>
             <span ref={arrowRef} className={styles.btnArrow} aria-hidden="true">
               →
             </span>

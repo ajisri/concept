@@ -1,85 +1,74 @@
-.footer {
-  background: var(--c-bg);
-  border-top: 1px solid var(--c-border);
-  /* Remove initial opacity:0 — GSAP handles the entrance */
-  overflow: hidden;
+.footerWrapper {
+  position: relative;
+  width: 100%;
+  /* clipPath applied inline in TSX */
 }
 
+.stickyParent {
+  position: relative;
+  width: 100%;
+  top: -100vh;
+}
+
+.footer {
+  position: sticky;
+  left: 0;
+  width: 100%;
+  background: var(--c-bg);
+  border-top: 1px solid var(--c-border);
+  color: var(--c-text);
+}
+
+/* ─── Elegant Grid: Sirnik Style ─── */
 .container {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 var(--container-padding);
+  padding: var(--sp-2xl) var(--container-padding) var(--sp-lg);
+  width: 100%;
 }
 
-/* ─── Giant Brand Strip ─── */
-.brandStrip {
-  padding: var(--sp-2xl) 0 var(--sp-xl);
-  border-bottom: 1px solid var(--c-border);
-  overflow: hidden;
-}
-
-.bigBrand {
-  display: flex;
-  flex-wrap: nowrap;
-  text-decoration: none;
-  /* Fluid font: fills the container width */
-  font-size: clamp(4rem, 11.5vw, 14rem);
-  font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 0.85;
-  letter-spacing: var(--ls-tighter);
-  color: var(--c-text);
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: opacity 0.4s ease;
-}
-
-.bigBrand:hover {
-  opacity: 0.5;
-}
-
-/* Each char wrapper = overflow:hidden mask slot */
-.brandCharWrapper {
-  display: inline-block;
-  overflow: hidden;
-  /* Extra descender space */
-  padding-bottom: 0.15em;
-  margin-bottom: -0.1em;
-}
-
-.brandChar {
-  display: inline-block;
-  will-change: transform;
-}
-
-/* ─── Info Grid ─── */
 .grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr;
   gap: var(--sp-2xl);
-  padding: var(--sp-2xl) 0;
+  padding-bottom: var(--sp-2xl);
   border-bottom: 1px solid var(--c-border);
 }
 
 .brandCol {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-lg);
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 600;
+  letter-spacing: var(--ls-tighter);
+  color: var(--c-text);
+  text-decoration: none;
+  margin-bottom: var(--sp-md);
+  display: inline-block;
+  line-height: 0.9;
 }
 
 .tagline {
   font-family: var(--font-sans);
-  font-size: var(--fs-md);
+  font-size: var(--fs-sm);
   font-weight: 400;
   color: var(--c-text-muted);
   line-height: var(--lh-relaxed);
+  max-width: 45ch;
+  letter-spacing: 0.02em;
 }
 
 .address {
   font-family: var(--font-sans);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   color: var(--c-text-dim);
   line-height: var(--lh-relaxed);
+  margin-top: var(--sp-2xl);
 }
 
 .linksCol {
@@ -91,47 +80,48 @@
 .colTitle {
   font-family: var(--font-sans);
   font-size: var(--fs-xs);
-  font-weight: 700;
-  color: var(--c-text);
-  text-transform: uppercase;
-  letter-spacing: var(--ls-widest);
-  margin-bottom: var(--sp-sm);
+  font-weight: 500;
+  color: var(--c-text-dim);
+  margin-bottom: var(--sp-xs);
 }
 
-/* ─── Hover Slide Link ─── */
+.linkItem {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Elegant Links ─── */
 .link {
   display: inline-block;
-  /* Fixed height = exactly one line — hides the second copy */
-  height: 1.4em;
-  overflow: hidden;
-  text-decoration: none;
-  line-height: 1.4;
-}
-
-.linkInner {
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.4s var(--ease-out-expo);
-}
-
-.link:hover .linkInner {
-  transform: translateY(-50%);
-}
-
-.linkDefault,
-.linkHover {
-  display: block;
   font-family: var(--font-sans);
   font-size: var(--fs-sm);
   font-weight: 400;
-  color: var(--c-text-muted);
-  white-space: nowrap;
-  padding: 2px 0;
+  color: var(--c-text);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
 }
 
-.linkHover {
-  color: var(--c-text); /* Hover copy is darker — feels "active" */
-  font-weight: 500;
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.link:hover {
+  color: var(--c-text-muted);
 }
 
 /* ─── Bottom Bar ─── */
@@ -139,15 +129,34 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--sp-xl) 0;
+  padding-top: var(--sp-lg);
 }
 
 .copy,
-.credit {
+.time {
   font-family: var(--font-sans);
   font-size: var(--fs-xs);
   color: var(--c-text-dim);
-  letter-spacing: var(--ls-wide);
+}
+
+.localTime {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.blinker {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--c-text-muted);
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* ─── Responsive ─── */
@@ -156,18 +165,21 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--sp-xl);
   }
-  .bigBrand {
-    font-size: clamp(3rem, 10vw, 6rem);
-  }
 }
 
 @media (max-width: 480px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-xl) var(--sp-md);
+  }
+  .brandCol {
+    grid-column: 1 / -1; /* Hero brand spans full */
+    margin-bottom: var(--sp-lg);
   }
   .bottom {
     flex-direction: column;
-    gap: var(--sp-sm);
-    text-align: center;
+    align-items: flex-start;
+    gap: var(--sp-md);
+    padding-bottom: var(--sp-xl); /* Clear iPhone/curved screens bottom */
   }
 }

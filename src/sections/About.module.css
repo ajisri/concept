@@ -24,9 +24,9 @@
 
 .metaLabel {
   font-family: var(--font-sans);
-  font-size: var(--fs-xs);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: var(--ls-widest);
+  letter-spacing: 0.15em;
   color: var(--c-text-dim);
   text-transform: uppercase;
 }
@@ -77,13 +77,13 @@
 
 .heading {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-size: clamp(3.5rem, 8vw, 8rem);
   font-weight: 700;
   line-height: 0.9;
-  letter-spacing: var(--ls-tighter);
+  letter-spacing: -0.04em;
   color: var(--c-text);
   text-transform: uppercase;
-  margin-bottom: var(--sp-sm);
+  margin-bottom: var(--sp-md);
   /* No opacity:0 — RevealText handles visibility via translateY on .lineInner */
 }
 
@@ -141,6 +141,9 @@
 }
 
 @media (max-width: 968px) {
+  .about {
+    padding-top: 15vh; /* Push section content below the fixed Navbar */
+  }
   .grid {
     grid-template-columns: 1fr;
     gap: var(--sp-md);
@@ -148,7 +151,14 @@
   .metaCol {
     border-right: none;
     border-bottom: 1px solid var(--c-border);
-    padding-bottom: var(--sp-sm);
+    padding-bottom: var(--sp-md);
+  }
+  .heading {
+    font-size: clamp(2.5rem, 8vw, 4rem); /* Reduce aggressive sizing */
+  }
+  .text {
+    font-size: clamp(1.2rem, 5vw, 1.8rem); /* Crucial: make paragraph fit the page */
+    padding-top: var(--sp-sm);
   }
   .stats {
     gap: var(--sp-xl);

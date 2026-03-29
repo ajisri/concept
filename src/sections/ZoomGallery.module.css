@@ -27,14 +27,15 @@
 
 .heading {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.5rem); /* Less overpowering size */
+  font-size: clamp(2rem, 8vw, 3.5rem); /* Scaled slightly larger for mobile impact but fits */
   font-weight: 700;
   line-height: 1; /* More breathable line-height */
-  letter-spacing: -0.02em; /* Optimal tracking for Display uppercase */
+  letter-spacing: -0.02em; 
   color: var(--c-text);
-  white-space: nowrap;
+  /* Removed white-space: nowrap so it can wrap on mobile */
   text-transform: uppercase;
-  margin-top: -8px; /* Tighter optical alignment to label */
+  margin-top: -8px; 
+  max-width: 90vw; /* Prevent bleed */
 }
 
 .perspective {
@@ -54,11 +55,15 @@
 
 .item {
   position: absolute;
-  width: clamp(180px, 22vw, 320px);
+  width: clamp(140px, 22vw, 320px);
   aspect-ratio: 3 / 4;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  /* Position driven by CSS logic */
+  top: calc(50% + var(--y));
+  left: calc(50% + var(--x));
+  transform: translate(-50%, -50%) translateZ(var(--z));
 }
 
 .imageWrapper {
@@ -78,7 +83,13 @@
 }
 
 @media (max-width: 768px) {
+  .header {
+    top: var(--sp-2xl); /* ensure header clears space */
+  }
   .item {
-    width: clamp(120px, 35vw, 200px);
+    width: clamp(110px, 35vw, 160px);
+    /* Use explicit mobile coordinates injected from JS */
+    top: calc(50% + var(--m-y));
+    left: calc(50% + var(--m-x));
   }
 }

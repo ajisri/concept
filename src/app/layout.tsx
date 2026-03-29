@@ -70,7 +70,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.variable}>
-      <body>
+      <body suppressHydrationWarning>
         {/* Fixed UI elements must NOT be inside the SmoothScroll transformed wrapper */}
         <Preloader />
         <CustomCursor />

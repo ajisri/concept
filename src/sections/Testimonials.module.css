@@ -1,7 +1,7 @@
 .testimonials {
   position: relative;
   width: 100%;
-  padding: clamp(80px, 10vw, 150px) 0;
+  padding: clamp(60px, 8vw, 120px) 0;
   background-color: var(--c-bg);
   border-top: 1px solid var(--c-border);
 }
@@ -11,105 +11,78 @@
   margin: 0 auto;
   padding: 0 var(--container-padding);
   display: grid;
-  grid-template-columns: 1fr 1.5fr; /* 2-column layout */
-  gap: var(--sp-3xl);
+  grid-template-columns: 1fr 2.5fr; /* Tight left column, expansive right */
+  gap: var(--sp-2xl);
   align-items: start;
 }
 
-/* ─── Left Sidebar (Sticky) ─── */
+/* ─── Left Sidebar (Sticky Label) ─── */
 .stickySidebar {
   position: sticky;
   top: clamp(80px, 15vh, 150px);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-lg);
-  padding-right: var(--sp-2xl);
 }
 
 .metaLabel {
   font-family: var(--font-sans);
   font-size: var(--fs-xs);
-  font-weight: 600;
-  letter-spacing: var(--ls-widest);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
   color: var(--c-text-dim);
-  text-transform: uppercase;
-}
-
-.sectionTitle {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: var(--ls-tighter);
-  color: var(--c-text);
-}
-
-.sectionDesc {
-  font-family: var(--font-sans);
-  font-size: var(--fs-sm);
-  line-height: var(--lh-relaxed);
-  color: var(--c-text-muted);
-  max-width: 300px;
 }
 
 /* ─── Right Sidebar (Scroll List) ─── */
 .scrollContent {
   display: flex;
   flex-direction: column;
-  gap: clamp(80px, 10vw, 120px);
-  margin-top: 20vh; /* Start slightly below the title */
-  margin-bottom: 20vh;
+  gap: clamp(80px, 10vw, 150px);
+  padding-right: clamp(10px, 5vw, 100px); /* Keep quotes from touching right edge */
+  max-width: 800px;
 }
 
 .testimonialCard {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-xl);
+  gap: var(--sp-lg);
 }
 
-.quoteMark {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 10vw, 8rem);
-  color: var(--c-text-dim);
-  line-height: 0.5;
-  font-weight: 700;
-  opacity: 0.2;
-}
-
-/* Kinetic word-reveal: each word is a span */
+/* Elegant word-wrapper handles word breaks natively */
 .quoteText {
   font-family: var(--font-sans);
-  font-size: clamp(1.5rem, 3vw, 2.8rem);
-  font-weight: 500;
-  line-height: 1.3;
+  font-size: clamp(1.2rem, 3vw, 2.2rem);
+  font-weight: 400;
+  line-height: var(--lh-tight);
   color: var(--c-text);
-  letter-spacing: -0.02em;
-  /* blockquote reset */
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-/* Each individual word — starts nearly transparent, animates to full opacity */
+.wordWrapper {
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+/* Each individual word inside the wrapper */
 .word {
-  display: inline;
+  display: inline-block;
   opacity: 0.1; /* Initial state — GSAP overwrites */
   will-change: opacity, transform;
 }
 
+/* ─── Author Meta ─── */
 .authorMeta {
   display: flex;
   align-items: center;
-  gap: var(--sp-lg);
-  margin-top: var(--sp-xl);
+  gap: var(--sp-md);
+  margin-top: var(--sp-sm);
 }
 
 .authorLine {
-  width: 60px;
-  height: 2px;
-  background-color: var(--c-text);
+  width: 40px;
+  height: 1px;
+  background-color: var(--c-text-dim);
   transform-origin: left center;
-  transform: scaleX(0); /* GSAP will animate to scaleX(1) */
+  transform: scaleX(0); /* GSAP will animate */
   flex-shrink: 0;
 }
 
@@ -120,33 +93,40 @@
 
 .authorName {
   font-family: var(--font-sans);
-  font-size: var(--fs-md);
-  font-weight: 700;
+  font-size: var(--fs-sm);
+  font-weight: 500;
   color: var(--c-text);
-  letter-spacing: var(--ls-tight);
+  letter-spacing: var(--ls-normal);
 }
 
 .authorRole {
   font-family: var(--font-sans);
   font-size: var(--fs-xs);
-  font-weight: 500;
-  color: var(--c-text-muted);
-  letter-spacing: var(--ls-widest);
-  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--c-text-dim);
   margin-top: 2px;
 }
 
 @media (max-width: 968px) {
   .container {
     grid-template-columns: 1fr;
+    gap: var(--sp-2xl);
   }
   .stickySidebar {
     position: relative;
     top: 0;
-    margin-bottom: var(--sp-3xl);
+    margin-bottom: var(--sp-lg);
   }
   .scrollContent {
-    margin-top: 0;
-    margin-bottom: 0;
+    padding-right: 0; /* Fully span available space on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials {
+    padding: clamp(40px, 6vw, 60px) 0;
+  }
+  .quoteText {
+    font-size: 1.25rem; /* Explicit comfortable size for tiny screens */
   }
 }

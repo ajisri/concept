@@ -1,27 +1,11 @@
 .hero {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-end;
+  /* True Swiss landing pages let spacing shape the height naturally */
+  padding: 22vh 0 15vh;
   background-color: var(--c-bg);
-  padding: var(--sp-2xl) 0;
   border-bottom: 1px solid var(--c-border);
-  overflow: hidden; /* contain noise grain */
-}
-
-/* ─── Film Grain Noise Overlay ─── */
-.noise {
-  position: absolute;
-  inset: -50%; /* Larger than viewport so jitter doesn't show edges */
-  width: 200%;
-  height: 200%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.4;
-  will-change: background-position;
+  overflow: hidden;
 }
 
 .gridContainer {
@@ -30,137 +14,96 @@
   margin: 0 auto;
   padding: 0 var(--container-padding);
   display: grid;
-  grid-template-columns: 1fr 3fr; /* Math ratio */
-  gap: var(--sp-xl);
-  align-items: flex-end;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--sp-md); /* Strict mechanical grid gap */
+  align-items: start;
 }
 
-.leftCol {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  padding-bottom: var(--sp-xs);
-  border-right: 1px solid var(--c-border);
-  padding-right: var(--sp-md);
-}
-
-.rightCol {
-  display: flex;
-  flex-direction: column;
+.labelCol {
+  grid-column: 1 / span 2;
+  margin-top: 0.5em; /* Optical alignment with heading cap height */
 }
 
 .metaLabel {
   font-family: var(--font-sans);
   font-size: var(--fs-xs);
-  font-weight: 600;
-  letter-spacing: var(--ls-widest);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
   color: var(--c-text-dim);
-  text-transform: uppercase;
-  margin-bottom: var(--sp-3xl);
+}
+
+.headingCol {
+  grid-column: 3 / span 10;
+  margin-bottom: clamp(60px, 12vh, 160px); 
 }
 
 .heading {
   font-family: var(--font-display);
-  font-size: var(--fs-hero);
-  font-weight: 700; /* Go bold grotesque */
-  line-height: 0.85; /* Extremely tight for uppercase sans */
-  letter-spacing: var(--ls-tighter);
+  font-size: clamp(2.5rem, 11vw, 11rem); /* Safely scaled down min-size for 320px portrait */
+  font-weight: 600; 
+  line-height: 0.88; 
+  letter-spacing: -0.04em;
   color: var(--c-text);
-  margin-bottom: var(--sp-xl);
+  margin: 0;
   text-transform: uppercase;
-  display: flex;
-  flex-direction: column;
+  overflow-wrap: break-word; /* Prevents overflow pushing the viewport wide */
+  word-break: break-word;
 }
 
 .headingLine {
-  display: flex;
-  overflow: hidden; /* This is the mask slot — chars clip here */
-  /* Extra space for descenders and the reveal travel */
-  padding-bottom: 0.15em;
-  margin-bottom: -0.05em;
-}
-
-.char {
-  display: inline-block;
+  display: block;
   will-change: transform, opacity;
 }
 
-.subtitleWrapper {
-  overflow: hidden; /* Mask slot for subtitle reveal */
-  padding-bottom: 0.1em;
+.subtitleCol {
+  grid-column: 6 / span 5; /* Mechanically indents out of 12 columns */
 }
 
 .subtitle {
   font-family: var(--font-sans);
-  font-size: var(--fs-md);
-  font-weight: 500;
+  font-size: clamp(1rem, 1.4vw, 1.4rem);
+  font-weight: 400;
   color: var(--c-text-muted);
-  max-width: 500px;
   line-height: var(--lh-relaxed);
-  letter-spacing: var(--ls-normal);
-  /* Remove initial opacity:0 — GSAP handles visibility via yPercent */
+  margin: 0;
+  will-change: transform, opacity;
 }
 
-/* Accessible visually-hidden heading for screen readers */
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* ─── Scroll Indicator ─── */
-.scrollIndicator {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--sp-md);
-  opacity: 0;
-}
-
-.scrollLine {
-  width: 1px;
-  height: 80px;
-  background: var(--c-border);
-  position: relative;
-  overflow: hidden;
-}
-
-.scrollLine::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: var(--c-text);
-  animation: scrollPulse 2s cubic-bezier(0.76, 0, 0.24, 1) infinite;
-}
-
-@keyframes scrollPulse {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(200%); }
-}
-
-.scrollText {
-  font-family: var(--font-sans);
-  font-size: var(--fs-xs);
-  letter-spacing: var(--ls-widest);
-  color: var(--c-text-muted);
-  text-transform: uppercase;
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .headingCol {
+    grid-column: 2 / span 11;
+  }
+  .subtitleCol {
+    grid-column: 5 / span 7;
+  }
 }
 
 @media (max-width: 768px) {
-  .heading {
-    font-size: var(--fs-4xl);
+  .hero {
+    padding: 15vh 0 10vh; /* tighter padding on mobile */
   }
-  .subtitle {
-    font-size: var(--fs-base);
+  .gridContainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .labelCol { 
+    grid-column: 1 / -1; 
+    margin-bottom: var(--sp-xl); 
+  }
+  .headingCol { 
+    grid-column: 1 / -1; 
+    margin-bottom: clamp(40px, 8vh, 100px); 
+  }
+  .subtitleCol { 
+    grid-column: 2 / -1; 
+  }
+  .heading {
+    letter-spacing: -0.02em;
+  }
+}
+
+@media (max-width: 480px) {
+  .subtitleCol { 
+    grid-column: 1 / -1; 
   }
 }

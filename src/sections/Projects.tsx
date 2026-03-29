@@ -234,7 +234,10 @@ export default function Projects() {
                 />
               </div>
               <div className={styles.hoverOverlay} aria-hidden="true">
-                <span>{proj.title}</span>
+                <div className={styles.hoverSlot}>
+                  <span className={styles.hoverText}>{proj.title}</span>
+                  <span className={styles.hoverSubtitle}>View Details —</span>
+                </div>
               </div>
             </div>
           ))}
@@ -243,8 +246,8 @@ export default function Projects() {
         {/* Sticky Discover Pill */}
         <div className={styles.floatingPill}>
           <div className={styles.pillContent}>
-            <span className={styles.pillLabel}>All Work</span>
-            <span className={styles.pillAction}>Discover +</span>
+            <span className={styles.pillLabel}>Explore Archive</span>
+            <span className={styles.pillAction}>Discover</span>
           </div>
         </div>
 

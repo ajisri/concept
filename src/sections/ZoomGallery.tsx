@@ -12,51 +12,44 @@ const GALLERY_IMAGES = [
   {
     src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80',
     alt: 'Modern skyscraper under construction — steel framework',
-    x: '-15%',
-    y: '5%',
-    z: -200,
+    x: '-15vw', y: '5vh', z: -200,
+    mx: '-25vw', my: '-15vh',
   },
   {
     src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80',
     alt: 'Construction crane at golden hour',
-    x: '25%',
-    y: '-25%',
-    z: -400,
+    x: '25vw', y: '-25vh', z: -400,
+    mx: '25vw', my: '20vh',
   },
   {
     src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80',
     alt: 'Architectural blueprints and design plans',
-    x: '-25%',
-    y: '30%',
-    z: -600,
+    x: '-25vw', y: '30vh', z: -600,
+    mx: '-20vw', my: '25vh',
   },
   {
     src: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600&q=80',
     alt: 'Modern building facade — geometric glass detail',
-    x: '30%',
-    y: '25%',
-    z: -350,
+    x: '30vw', y: '25vh', z: -350,
+    mx: '15vw', my: '-30vh',
   },
   {
     src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80',
     alt: 'Skyscraper towers viewed from below — corporate district',
-    x: '5%',
-    y: '-5%',
-    z: -800,
+    x: '5vw', y: '-5vh', z: -800,
+    mx: '5vw', my: '5vh',
   },
   {
     src: 'https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?w=600&q=80',
     alt: 'Steel structure framework — industrial engineering',
-    x: '-35%',
-    y: '50%',
-    z: -500,
+    x: '-35vw', y: '50vh', z: -500,
+    mx: '-30vw', my: '45vh',
   },
   {
     src: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?w=600&q=80',
     alt: 'Interior construction progress — concrete and steel',
-    x: '35%',
-    y: '-30%',
-    z: -700,
+    x: '35vw', y: '-30vh', z: -700,
+    mx: '35vw', my: '-5vh',
   },
 ] as const;
 
@@ -123,10 +116,12 @@ export default function ZoomGallery() {
               key={i}
               className={styles.item}
               style={{
-                left: `calc(50% + ${img.x})`,
-                top: `calc(50% + ${img.y})`,
-                transform: `translate(-50%, -50%) translateZ(${img.z}px)`,
-              }}
+                '--x': img.x,
+                '--y': img.y,
+                '--m-x': img.mx,
+                '--m-y': img.my,
+                '--z': `${img.z}px`,
+              } as React.CSSProperties}
             >
               <div className={styles.imageWrapper}>
                 <Image

@@ -49,7 +49,27 @@
 
   --c-white: #ffffff;
   --c-black: #000000;
+}
 
+[data-theme='dark'] {
+  /* ─── Seamless Dark Mode Overrides ─── */
+  --c-bg: #050505;
+  --c-bg-elevated: #111111;
+  --c-bg-card: #151515;
+  --c-surface: #1a1a1a;
+
+  --c-text: #ffffff;
+  --c-text-muted: #aaaaaa;
+  --c-text-dim: #777777;
+
+  --c-border: rgba(255, 255, 255, 0.1);
+  --c-border-hover: rgba(255, 255, 255, 0.25);
+
+  --c-accent: #ffffff;
+  --c-accent-dark: #cccccc;
+}
+
+:root {
   /* ─── Spacing (Intentional & Ample) ─── */
   --sp-xs: 0.5rem;
   --sp-sm: 1rem;

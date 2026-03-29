@@ -89,7 +89,7 @@ export default function About() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.about} id="about">
+    <section ref={sectionRef} className={styles.about} id="vision">
       <div className={styles.container}>
         <div className={styles.grid}>
           <div className={styles.metaCol}>
@@ -99,7 +99,7 @@ export default function About() {
           <div className={styles.textCol}>
             <RevealText
               as="h2"
-              lines={["WE DON'T JUST BUILD", 'WE ENGINEER REALITY.']}
+              lines={['MORE THAN STRUCTURE.', 'WE ENGINEER EMOTION.']}
               className={styles.heading}
               stagger={0.1}
               duration={1}
@@ -110,10 +110,10 @@ export default function About() {
               className={styles.text}
               ref={textRef}
             >
-              Our methodology is rooted in absolute precision and uncompromising
-              structural integrity. From brutalist concrete forms to soaring
-              geometric glass facades, we redefine the modern skyline with a
-              dedication to timeless endurance.
+              We do not merely construct buildings; we establish enduring landmarks.
+              Our methodology merges brutalist raw power with microscopic precision.
+              We believe architecture should not only be seen, but subconsciously felt—a bridge
+              between spatial presence and human experience.
             </p>
 
             <div className={styles.stats}>

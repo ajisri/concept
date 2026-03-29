@@ -182,11 +182,58 @@
 }
 
 @media (max-width: 768px) {
+  .services, .stickyWrapper {
+    height: auto;
+    overflow: hidden; /* Prevent horizontal page breaking */
+  }
+  .sliderContainer {
+    height: auto;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-bottom: var(--sp-xl);
+  }
+  .sliderContainer::-webkit-scrollbar {
+    display: none;
+  }
+  .panel {
+    flex: 0 0 85vw; /* Allow the next service image to peek through! */
+    width: 85vw;
+    height: auto;
+    padding: var(--sp-xl) var(--sp-sm);
+    scroll-snap-align: center;
+  }
+  .panelInner {
+    height: 60vh;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
   .textContent {
-    bottom: var(--sp-lg);
-    left: var(--sp-lg);
-    right: var(--sp-lg);
-    width: auto; /* Full width minus padding */
-    padding: var(--sp-xl);
+    bottom: -15px; /* Subtle offset */
+    left: 10px;
+    width: calc(100% - 20px);
+    padding: var(--sp-md);
+  }
+  .itemTitle {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+    word-break: break-word;
+  }
+  .introPanel {
+    flex: 0 0 85vw;
+    width: 85vw;
+    height: 75vh; /* Give it enough room for the huge text */
+    padding-left: var(--container-padding);
+    padding-right: var(--sp-md); /* buffer right edge */
+  }
+  .heading {
+    font-size: clamp(2rem, 11vw, 4rem); /* Slightly smaller base */
+    line-height: 1.1; /* Fix vertical overlap within the text block itself */
+    word-break: break-word; /* Prevent width overlap */
+    hyphens: auto;
   }
 }

@@ -4,19 +4,37 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './Navbar.module.css';
 import { gsap } from 'gsap';
 import { NAVBAR_ENTRANCE_DELAY } from '@/lib/animation-constants';
-
-const NAV_LINKS = [
-  { label: 'Projects', href: '#projects' },
-  { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Contact', href: '#contact' },
-];
+import { useLanguage, useTheme } from '@/store/settings';
+import { dict } from '@/lib/dictionary';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [windowHeight, setWindowHeight] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
-  const linksRef = useRef<HTMLAnchorElement[]>([]);
+  const pathRef = useRef<SVGPathElement>(null);
+  const linksRef = useRef<HTMLDivElement[]>([]);
   const navRef = useRef<HTMLElement>(null);
+  const { lang, setLanguage } = useLanguage();
+  const { theme, setTheme } = useTheme();
+
+  const t = dict[lang as 'en' | 'id']?.nav || dict.en.nav;
+  
+  const NAV_LINKS = [
+    { label: t.journey, href: '#journey' },
+    { label: t.vision, href: '#vision' },
+    { label: t.portfolio, href: '#projects' },
+    { label: t.expertise, href: '#expertise' },
+    { label: t.clients, href: '#clients' },
+    { label: t.startProject, href: '#contact' },
+  ];
+
+  // Resize listener for exact window height used by SVG Curve
+  useEffect(() => {
+    setWindowHeight(window.innerHeight);
+    const handleResize = () => setWindowHeight(window.innerHeight);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Entrance animation — after preloader
   useEffect(() => {
@@ -36,36 +54,70 @@ export default function Navbar() {
     return () => ctx.revert();
   }, []);
 
-  // Menu open/close animation
+  // Menu open/close SVG & Translation animation
   useEffect(() => {
+    if (!windowHeight) return;
+
+    // Custom tight ease mimicking Framer Motion [0.76, 0, 0.24, 1]
+    const laroseEase = 'power4.inOut';
+
     if (isOpen) {
-      gsap.to(menuRef.current, {
-        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-        duration: 0.8,
-        ease: 'power4.inOut',
-      });
-      gsap.fromTo(
-        linksRef.current,
-        { y: 80, opacity: 0 },
+      document.body.style.overflow = 'hidden';
+      
+      // Circular expanding reveal background
+      gsap.fromTo(menuRef.current, 
+        { 
+          clipPath: 'circle(0% at calc(100% - 45px) 45px)',
+          autoAlpha: 0, // handles visibility and opacity
+        },
         {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          ease: 'power3.out',
-          stagger: 0.08,
-          delay: 0.3,
+          clipPath: 'circle(150% at calc(100% - 45px) 45px)',
+          autoAlpha: 1,
+          duration: 1,
+          ease: laroseEase,
         }
       );
-      document.body.style.overflow = 'hidden';
+
+      // Horizontal Slide-in Link Reveal (Olivier Larose style)
+      gsap.fromTo(
+        linksRef.current,
+        { x: 80, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: laroseEase,
+          stagger: 0.05,
+          delay: 0.1, // Wait just a bit before sliding text in
+        }
+      );
     } else {
-      gsap.to(menuRef.current, {
-        clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-        duration: 0.6,
-        ease: 'power4.inOut',
-      });
       document.body.style.overflow = '';
+      
+      // Close by shrinking circle back to burger menu bounds
+      gsap.to(menuRef.current, {
+        clipPath: 'circle(0% at calc(100% - 45px) 45px)',
+        autoAlpha: 0,
+        duration: 0.8,
+        ease: laroseEase,
+      });
     }
-  }, [isOpen]);
+  }, [isOpen, windowHeight]);
+
+  // Handle manual navigation jump (Essential for mobile deep links/smoothscroll)
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsOpen(false);
+    
+    // Slight delay to allow menu closing animation to start
+    setTimeout(() => {
+      const target = document.querySelector(href);
+      if (target) {
+        // If smooth scroll or normal scroll, we jump to target
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 400);
+  };
 
   return (
     <header ref={navRef} className={styles.navbar}>
@@ -73,6 +125,24 @@ export default function Navbar() {
         <a href="#" className={styles.logo} aria-label="Konstrüksi — Home">
           <span className={styles.logoAccent}>K</span>ONSTRÜKSI
         </a>
+
+        <div className={styles.toggles}>
+          <button 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className={styles.toggleBtn}
+            aria-label="Toggle Theme"
+          >
+            {theme === 'dark' ? 'LGT' : 'DRK'}
+          </button>
+          
+          <button 
+            onClick={() => setLanguage(lang === 'en' ? 'id' : 'en')}
+            className={styles.toggleBtn}
+            aria-label="Change Language"
+          >
+            {lang === 'en' ? 'ID' : 'EN'}
+          </button>
+        </div>
 
         <button
           className={`${styles.burger} ${isOpen ? styles.burgerOpen : ''}`}
@@ -82,8 +152,14 @@ export default function Navbar() {
           aria-controls="fullscreen-menu"
           id="menu-toggle"
         >
-          <span className={styles.burgerLine} aria-hidden="true" />
-          <span className={styles.burgerLine} aria-hidden="true" />
+          {isOpen ? (
+            <span className={styles.closeText}>CLOSE</span>
+          ) : (
+            <>
+              <span className={styles.burgerLine} aria-hidden="true" />
+              <span className={styles.burgerLine} aria-hidden="true" />
+            </>
+          )}
         </button>
       </div>
 
@@ -95,26 +171,44 @@ export default function Navbar() {
         aria-modal="true"
         aria-label="Navigation menu"
       >
+        {/* SVG Curve Removed — Replaced by pure CSS Clip-Path expanding circle */}
+
         <nav className={styles.menuNav} aria-label="Main navigation">
           {NAV_LINKS.map((link, i) => (
-            <a
-              key={link.label}
-              href={link.href}
+            <div 
+              key={link.label} 
+              className={styles.menuLinkWrapper}
               ref={(el) => {
                 if (el) linksRef.current[i] = el;
               }}
-              className={styles.menuLink}
-              onClick={() => setIsOpen(false)}
             >
-              <span className={styles.menuLinkIndex} aria-hidden="true">
-                0{i + 1}
-              </span>
-              <span className={styles.menuLinkText}>{link.label}</span>
-            </a>
+              <a
+                href={link.href}
+                className={styles.menuLink}
+                onClick={(e) => handleNavClick(e, link.href)}
+              >
+                <span className={styles.menuLinkIndex} aria-hidden="true">
+                  0{i + 1}
+                </span>
+                <span className={styles.menuLinkText}>{link.label}</span>
+              </a>
+
+              {/* Inject the stats after 'Expertise' */}
+              {link.label === t.expertise && (
+                <div className={styles.menuStats}>
+                  {t.stats.map((stat, idx) => (
+                    <div key={idx} className={styles.menuStat}>
+                      <span className={styles.statNum}>{stat.num}</span>
+                      <span className={styles.statDesc}>{stat.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </nav>
         <div className={styles.menuFooter}>
-          <p className={styles.menuFooterText}>Building Tomorrow&apos;s Landmarks</p>
+          <p className={styles.menuFooterText}>{t.footer}</p>
           <div className={styles.menuSocials}>
             <a href="#" aria-label="Konstrüksi on Instagram">Instagram</a>
             <a href="#" aria-label="Konstrüksi on LinkedIn">LinkedIn</a>

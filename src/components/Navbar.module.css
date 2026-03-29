@@ -3,16 +3,20 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10000; /* above .menu (9999) so burger stays clickable */
+  z-index: 100000; /* above .menu (99999) so burger stays clickable */
   padding: var(--sp-md) var(--container-padding);
-  pointer-events: none; /* Let clicks pass through empty areas */
+  background-color: var(--c-bg); /* Opaque background to prevent text collision */
+  border-bottom: 1px solid var(--c-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  pointer-events: auto; /* Let Navbar take clicks */
 }
 
 .inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  pointer-events: auto; /* Catch clicks on logo and toggle */
+  position: relative;
+  z-index: 100001; /* Ensure this STAYS ON TOP of .menu (99999) */
 }
 
 .logo {
@@ -26,92 +30,151 @@
 }
 
 .logoAccent {
-  display: inline-block;
+  color: var(--c-accent-dark);
+}
+
+.toggles {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  margin-left: auto;
+  margin-right: var(--sp-md);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 2s; /* appear after everything */
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.toggleBtn {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 600;
   color: var(--c-text);
+  border: 1px solid var(--c-border);
+  background: var(--c-bg);
+  padding: 0.3em 0.8em;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.toggleBtn:hover {
+  background: var(--c-text);
+  color: var(--c-bg);
+  border-color: var(--c-text);
 }
 
 /* ─── Burger ─── */
 .burger {
   position: relative;
-  width: 48px;
   height: 48px;
-  background: transparent;
+  min-width: 48px;
+  background: transparent; /* No pill background for standard burger */
   border: none;
-  border-radius: 50%;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 6px;
-  z-index: 1000;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .burgerLine {
   width: 24px;
   height: 2px;
   background-color: var(--c-text);
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s;
   transform-origin: center;
-}
-
-.burgerOpen .burgerLine:nth-child(1) {
-  transform: translateY(4px) rotate(45deg);
-  background-color: var(--c-text);
-}
-
-.burgerOpen .burgerLine:nth-child(2) {
-  transform: translateY(-4px) rotate(-45deg);
-  background-color: var(--c-text);
 }
 
 .burger:hover .burgerLine {
   width: 28px;
 }
 
-/* ─── Menu Overlay ─── */
+.closeText {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--c-menu-bg, var(--c-bg)); 
+  background-color: var(--c-menu-text, var(--c-text)); 
+  padding: 0.6em 1.2em;
+  border-radius: 999px; /* Pill button styling */
+  text-transform: uppercase;
+}
+
+/* ─── Menu Overlay (Circular Reveal) ─── */
 .menu {
+  /* Inject specific overlay variables locally */
+  --c-menu-bg: #c5ff41; /* Signature Lime */
+  --c-menu-text: #0a0a0a;
+
   position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--c-bg);
-  z-index: 9999; /* above GSAP ScrollTrigger pinned sections and Lenis wrapper */
-  display: flex;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw; /* Take up entire screen now! */
+  background-color: var(--c-menu-bg); 
+  color: var(--c-menu-text); 
+  z-index: 99999;
+  display: flex; /* GSAP toggles pointer-events, always display flex */
   flex-direction: column;
   justify-content: center;
   padding: 0 var(--container-padding);
-  pointer-events: auto;
-  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-  will-change: clip-path;
+  visibility: hidden; /* start invisible. autoAlpha handles revealing */
+  pointer-events: auto; /* CRITICAL: Catch clicks when visible since Navbar uses it! */
+  /* NO overflow, fit exactly onto one page */
+  overflow: hidden; 
+  /* initial state for the clipPath */
+  clip-path: circle(0% at calc(100% - 45px) 45px); 
 }
+
+/* ─── Removed Awwwards Curve SVG ─── */
 
 .menuNav {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--sp-2xl);
+  justify-content: center;
+  height: 100%;
+  gap: var(--sp-sm); /* tighter gap to fit 6 items */
   margin: 0 auto;
-  max-width: var(--container-max);
   width: 100%;
+  max-width: var(--container-max);
+  perspective: 1200px;
+}
+
+.menuLinkWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.15); /* Subtler dividing line */
+  padding-bottom: clamp(0.2rem, 1vh, 1rem); /* Dynamic shrink for height */
+  margin-bottom: 0;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .menuLink {
   position: relative;
   display: flex;
-  align-items: baseline;
-  gap: var(--sp-md);
+  align-items: center; 
+  gap: clamp(0.5rem, 2vw, 2rem);
   text-decoration: none;
-  color: var(--c-text);
+  color: var(--c-menu-text);
   font-family: var(--font-display);
-  font-size: clamp(4rem, 10vw, 8rem);
+  font-size: clamp(2.5rem, 8vw, 5.5rem); /* Tamed to fit exactly 6 items without scroll */
   font-weight: 700;
-  line-height: 0.85;
+  line-height: 0.9;
   text-transform: uppercase;
   letter-spacing: var(--ls-tighter);
   transition: color 0.3s ease;
-  will-change: transform, opacity;
 }
 
 .menuLinkIndex {
@@ -120,7 +183,6 @@
   font-weight: 500;
   color: var(--c-text-dim);
   letter-spacing: var(--ls-normal);
-  transform: translateY(-30px); /* Align properly with massive text */
 }
 
 /* Hover effects */
@@ -131,17 +193,50 @@
 }
 
 .menuLink:hover .menuLinkText {
-  transform: translateX(40px);
+  transform: translateX(20px);
 }
 
 .menuLink:hover .menuLinkIndex {
-  color: var(--c-text);
+  color: var(--c-menu-text);
+}
+
+/* ─── Menu Stats (Restored) ─── */
+.menuStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-xl);
+  margin-left: calc(var(--fs-md) + var(--sp-lg)); /* Align with S */
+  margin-top: var(--sp-md);
+}
+
+.menuStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statNum {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: var(--ls-tighter);
+  color: var(--c-menu-text);
+  line-height: 0.9;
+}
+
+.statDesc {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--c-text-dim);
+  text-transform: uppercase;
 }
 
 /* ─── Footer Details ─── */
 .menuFooter {
   position: absolute;
-  bottom: var(--sp-2xl);
+  bottom: var(--sp-lg);
   left: 0;
   width: 100%;
   display: flex;
@@ -152,15 +247,16 @@
   margin: 0 auto;
   left: 50%;
   transform: translateX(-50%);
-  border-top: 1px solid var(--c-border);
-  padding-top: var(--sp-xl);
+  border-top: 1px solid rgba(10, 10, 10, 0.15);
+  padding-top: var(--sp-lg);
 }
 
 .menuFooterText {
   font-family: var(--font-sans);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   font-weight: 500;
-  color: var(--c-text-dim);
+  color: var(--c-menu-text);
+  opacity: 0.7;
   text-transform: uppercase;
   letter-spacing: var(--ls-widest);
 }
@@ -172,12 +268,11 @@
 
 .menuSocials a {
   font-family: var(--font-sans);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  color: var(--c-text);
+  font-size: var(--fs-md);
+  font-weight: 400;
+  color: var(--c-menu-text);
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: var(--ls-widest);
+  letter-spacing: normal;
   position: relative;
 }
 
@@ -188,7 +283,7 @@
   left: 0;
   width: 0%;
   height: 1px;
-  background-color: var(--c-text);
+  background-color: var(--c-menu-text);
   transition: width 0.3s ease;
 }
 
@@ -197,9 +292,54 @@
 }
 
 @media (max-width: 768px) {
+  .menu {
+    padding-top: var(--sp-2xl); 
+    padding-bottom: 120px; /* buffer for footer */
+  }
+
+  .menuLink {
+    font-size: clamp(1.8rem, 8vw, 3rem); 
+    gap: var(--sp-sm); 
+  }
+
+  .menuLinkText {
+    transform: none; /* Prevent horizontal jitter on mobile */
+  }
+
+  .menuLinkIndex {
+    font-size: var(--fs-xs);
+  }
+
+  .menuStats {
+    margin-left: 0; 
+    gap: var(--sp-sm); 
+    margin-top: var(--sp-sm);
+  }
+
+  .statNum {
+    font-size: clamp(1.2rem, 5vw, 2rem); 
+  }
+  
+  .statDesc {
+    font-size: 0.5rem;
+  }
+
   .menuFooter {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--sp-lg);
+    gap: var(--sp-sm);
+    padding-top: var(--sp-sm);
+    padding-bottom: var(--sp-sm);
+    position: absolute; 
+    bottom: clamp(60px, 8vh, 100px); /* Safely clear FABs and dynamic bottom bars */
+    left: var(--container-padding);
+    width: calc(100% - (var(--container-padding) * 2));
+    transform: none;
+    margin: 0; 
+  }
+
+  .menuSocials {
+    gap: var(--sp-md);
+    flex-wrap: wrap; 
   }
 }
