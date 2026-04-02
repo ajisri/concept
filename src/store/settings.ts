@@ -58,3 +58,27 @@ export function useTheme() {
   );
   return { theme, setTheme: themeStore.setTheme };
 }
+// ─── Scroll Lock Store ───
+let scrollLocked = false;
+const scrollListeners = new Set<(locked: boolean) => void>();
+
+export const scrollLockStore = {
+  getSnapshot: () => scrollLocked,
+  subscribe: (listener: () => void) => {
+    scrollListeners.add(listener);
+    return () => scrollListeners.delete(listener);
+  },
+  setLocked: (locked: boolean) => {
+    scrollLocked = locked;
+    scrollListeners.forEach((l) => l(locked));
+  },
+};
+
+export function useScrollLock() {
+  const isLocked = useSyncExternalStore(
+    scrollLockStore.subscribe,
+    scrollLockStore.getSnapshot,
+    () => false
+  );
+  return { isLocked, setLocked: scrollLockStore.setLocked };
+}

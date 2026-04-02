@@ -1,7 +1,7 @@
 .cta {
   padding: clamp(8rem, 16vh, 16rem) 0;
   position: relative;
-  background: var(--c-bg);
+  background: transparent;
   border-top: 1px solid var(--c-border);
 }
 

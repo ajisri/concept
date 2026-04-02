@@ -5,7 +5,7 @@
   width: 100%;
   z-index: 100000; /* above .menu (99999) so burger stays clickable */
   padding: var(--sp-md) var(--container-padding);
-  background-color: var(--c-bg); /* Opaque background to prevent text collision */
+  background-color: transparent; /* inherits from body transition */
   border-bottom: 1px solid var(--c-border);
   transition: background-color 0.3s ease, border-color 0.3s ease;
   pointer-events: auto; /* Let Navbar take clicks */

@@ -58,6 +58,9 @@ export const dict = {
         },
       ],
     },
+    projects: {
+      drag: 'DRAG TO EXPLORE',
+    },
   },
   id: {
     nav: {
@@ -117,6 +120,9 @@ export const dict = {
           desc: 'Lebih sedikit, dampaknya lebih besar. Dengan mengeliminasi polusi visual dan menerapkan pola navigasi intuitif, kami mereduksi beban ingatan sehingga sang arsitektur yang berbicara.',
         },
       ],
+    },
+    projects: {
+      drag: 'GESER UNTUK JELAJAHI',
     },
   },
 };

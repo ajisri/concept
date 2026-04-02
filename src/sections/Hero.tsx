@@ -22,6 +22,18 @@ export default function Hero() {
       ).matches;
 
       if (!prefersReducedMotion) {
+        // ─── 0. Video Background Parallax ─────────────────────────────────
+        gsap.to('.js-hero-video', {
+          yPercent: 10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+
         // ─── 1. Elegant line reveal for headings (No clipping) ─────────────
         gsap.fromTo(
           '.js-hero-line',
@@ -82,6 +94,23 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className={styles.hero} id="journey" aria-label="Introduction">
+      {/* Background Video Texture — Abstract Architectural Shadows */}
+      <div className={styles.videoWrapper}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={`${styles.video} js-hero-video`}
+          poster="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800"
+        >
+          <source 
+            src="https://player.vimeo.com/external/370331493.hd.mp4?s=38d504505c6d3bc85b13511b033d528b&profile_id=172" 
+            type="video/mp4" 
+          />
+        </video>
+      </div>
+
       <div className={styles.gridContainer}>
         
         {/* Label perfectly anchored to Column 1 */}

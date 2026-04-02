@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   padding: var(--sp-section) 0;
-  background-color: var(--c-bg);
+  background-color: transparent;
   /* hidden unconditionally masks extreme parallax images from bleeding into other sections */
   overflow: hidden;
 }
@@ -98,10 +98,20 @@
   z-index: 5;
   transition: z-index 0.2s ease;
   will-change: transform;
+  pointer-events: auto; /* explicit for click safety */
+  user-select: none;
 }
 
 .polaroid:hover {
-  z-index: 20; /* Pull image to front on hover */
+  z-index: 50; /* Bring way to the front to ensure no element blocks the click */
+}
+
+.itemInner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  will-change: transform;
+  pointer-events: none; /* Let clicks pass to the parent .polaroid */
 }
 
 .imageWrapper {
@@ -129,6 +139,7 @@
   padding: var(--sp-xl);
   opacity: 0;
   transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none; /* Never block parent clicks */
 }
 
 .hoverSlot {
@@ -258,5 +269,40 @@
   }
   .heading {
     font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+}
+
+.mobileHint {
+  display: none;
+  margin-top: var(--sp-md);
+  align-items: center;
+  gap: var(--sp-sm);
+  opacity: 0.5;
+}
+
+.hintLine {
+  width: 30px;
+  height: 1px;
+  background-color: var(--c-text);
+  transform-origin: left;
+  animation: hintLineMove 2s infinite alternate;
+}
+
+@keyframes hintLineMove {
+  from { transform: scaleX(0.4); opacity: 0.2; }
+  to { transform: scaleX(1); opacity: 1; }
+}
+
+.mobileHint span {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .mobileHint {
+    display: flex;
   }
 }

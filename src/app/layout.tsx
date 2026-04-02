@@ -6,6 +6,7 @@ import CustomCursor from '@/components/CustomCursor';
 import PageCurtain from '@/components/PageCurtain';
 import Preloader from '@/components/Preloader';
 import Navbar from '@/components/Navbar';
+import BackgroundTransition from '@/components/BackgroundTransition';
 
 // Inter is a variable font — no weight needed
 const inter = Inter({
@@ -76,6 +77,7 @@ export default function RootLayout({
         <CustomCursor />
         <PageCurtain />
         <Navbar />
+        <BackgroundTransition />
         <div className="noise-overlay" aria-hidden="true" />
         
         {/* The scrolling physics only apply to the actual page content */}

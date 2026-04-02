@@ -5,6 +5,8 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useScrollLock, scrollLockStore } from '@/store/settings';
+
 gsap.registerPlugin(ScrollTrigger);
 
 interface SmoothScrollProps {
@@ -13,10 +15,20 @@ interface SmoothScrollProps {
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null);
-  // Wrapper ref for velocity skew — applied to the entire page content
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // ─── Listen for scroll lock changes ──────────────────────────────────
+    const unsubscribe = scrollLockStore.subscribe(() => {
+      if (lenisRef.current) {
+        if (scrollLockStore.getSnapshot()) {
+          lenisRef.current.stop();
+        } else {
+          lenisRef.current.start();
+        }
+      }
+    });
+
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     ).matches;
@@ -74,6 +86,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      unsubscribe();
       lenis.destroy();
       gsap.ticker.remove(tick);
       if (wrapperRef.current) {

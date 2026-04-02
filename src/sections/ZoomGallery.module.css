@@ -2,7 +2,7 @@
   position: relative;
   height: 100vh;
   overflow: hidden;
-  background: var(--c-bg);
+  background: transparent;
 }
 
 .header {

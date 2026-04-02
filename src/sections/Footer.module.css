@@ -14,7 +14,7 @@
   position: sticky;
   left: 0;
   width: 100%;
-  background: var(--c-bg);
+  background: transparent;
   border-top: 1px solid var(--c-border);
   color: var(--c-text);
 }

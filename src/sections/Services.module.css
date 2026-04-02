@@ -3,7 +3,7 @@
   /* GSAP will pin this wrapper, so we just design for 100vh height per tick */
   height: 100vh;
   width: 100vw;
-  background-color: var(--c-bg); /* light theme */
+  background-color: transparent; /* inherits from body transition */
   overflow: hidden;
 }
 

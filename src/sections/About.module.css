@@ -1,10 +1,16 @@
 .about {
+  min-height: 100vh;
   padding: var(--sp-section) 0;
-  background-color: var(--c-bg);
+  display: flex;
+  align-items: center;
+  background-color: transparent;
   border-bottom: 1px solid var(--c-border);
+  position: relative;
+  scroll-margin-top: 100px; /* Account for fixed navbar */
 }
 
 .container {
+  width: 100%;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-padding);
@@ -14,7 +20,7 @@
   display: grid;
   grid-template-columns: 1fr 3fr;
   gap: var(--sp-xl);
-  margin-bottom: var(--sp-section);
+  margin-bottom: var(--sp-lg);
 }
 
 .metaCol {
@@ -43,7 +49,8 @@
 
 .imageWrapper {
   width: 100%;
-  height: clamp(500px, 60vh, 800px);
+  height: 40vh; /* Reduced to fit in one page with text */
+  min-height: 300px;
   overflow: hidden;
   position: relative; /* required for next/image fill */
   clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); /* initial state for GSAP reveal */
@@ -77,13 +84,13 @@
 
 .heading {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-size: clamp(2.5rem, 6vw, 5rem); /* Reduced for better fit */
   font-weight: 700;
   line-height: 0.9;
   letter-spacing: -0.04em;
   color: var(--c-text);
   text-transform: uppercase;
-  margin-bottom: var(--sp-md);
+  margin-bottom: var(--sp-sm);
   /* No opacity:0 — RevealText handles visibility via translateY on .lineInner */
 }
 
@@ -96,13 +103,13 @@
 
 .text {
   font-family: var(--font-sans);
-  font-size: var(--fs-xl);
+  font-size: 1.236rem; /* 2rem / 1.618 ≈ 1.236rem (Golden Ratio reduction) */
   font-weight: 500;
   color: var(--c-text);
-  line-height: var(--lh-normal);
+  line-height: 1.618; /* Golden ratio line height for serenity */
   letter-spacing: var(--ls-tight);
   opacity: 0;
-  max-width: 900px;
+  max-width: 800px;
 }
 
 /* ─── Stats ─── */
@@ -142,7 +149,7 @@
 
 @media (max-width: 968px) {
   .about {
-    padding-top: 15vh; /* Push section content below the fixed Navbar */
+    padding-top: var(--sp-section); /* Use consistent section spacing */
   }
   .grid {
     grid-template-columns: 1fr;

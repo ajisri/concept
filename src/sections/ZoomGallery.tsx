@@ -103,7 +103,7 @@ export default function ZoomGallery() {
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.zoomGallery}>
+    <section ref={sectionRef} className={styles.zoomGallery} id="gallery">
       <div ref={headingRef} className={styles.header}>
         <span className={styles.label}>GALLERY</span>
         <h2 className={styles.heading}>Into the depth of detail</h2>
@@ -129,7 +129,8 @@ export default function ZoomGallery() {
                   alt={img.alt}
                   fill
                   sizes="(max-width: 768px) 80vw, 30vw"
-                  loading="lazy"
+                  priority={i < 2}
+                  loading={i < 2 ? 'eager' : 'lazy'}
                   quality={75}
                 />
               </div>

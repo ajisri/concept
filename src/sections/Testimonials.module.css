@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   padding: clamp(60px, 8vw, 120px) 0;
-  background-color: var(--c-bg);
+  background-color: transparent;
   border-top: 1px solid var(--c-border);
 }
 
