@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import styles from './Hero.module.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,6 +15,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -22,9 +24,9 @@ export default function Hero() {
       ).matches;
 
       if (!prefersReducedMotion) {
-        // ─── 0. Video Background Parallax ─────────────────────────────────
-        gsap.to('.js-hero-video', {
-          yPercent: 10,
+        // ─── 0. Background Image Parallax ──────────────────────────────────
+        gsap.to(bgRef.current, {
+          yPercent: 15,
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -34,7 +36,7 @@ export default function Hero() {
           },
         });
 
-        // ─── 1. Elegant line reveal for headings (No clipping) ─────────────
+        // ─── 1. Elegant line reveal for headings ───────────────────────────
         gsap.fromTo(
           '.js-hero-line',
           { y: 50, opacity: 0 },
@@ -48,7 +50,7 @@ export default function Hero() {
           }
         );
 
-        // ─── 2. Subtitle fade in ───────────────────────────────────────────
+        // ─── 2. Subtitle fade in ──────────────────────────────────────────
         gsap.fromTo(
           '.js-hero-subtitle',
           { y: 30, opacity: 0 },
@@ -61,7 +63,7 @@ export default function Hero() {
           }
         );
 
-        // ─── 3. Very subtle parallax without opacity fade (Fix missing text)
+        // ─── 3. Global Parallax for Text Layers ───────────────────────────
         gsap.to(headlineRef.current, {
           yPercent: -10,
           ease: 'none',
@@ -69,12 +71,12 @@ export default function Hero() {
             trigger: sectionRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: true, // Tie movement to scroll organically
+            scrub: true,
           },
         });
 
         gsap.to(subtitleRef.current, {
-          yPercent: -15, // Moves slightly faster for depth
+          yPercent: -15,
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -94,26 +96,22 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className={styles.hero} id="journey" aria-label="Introduction">
-      {/* Background Video Texture — Abstract Architectural Shadows */}
+      {/* High-Impact Static Background Case — Replaces Video per User Request */}
       <div className={styles.videoWrapper}>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className={`${styles.video} js-hero-video`}
-          poster="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=800"
-        >
-          <source 
-            src="https://player.vimeo.com/external/370331493.hd.mp4?s=38d504505c6d3bc85b13511b033d528b&profile_id=172" 
-            type="video/mp4" 
+        <div ref={bgRef} className={styles.imageInner}>
+          <Image
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2400&auto=format&fit=crop"
+            alt="Modern architectural structure — geometric perspective"
+            fill
+            priority
+            quality={90}
+            className={styles.bgImage}
           />
-        </video>
+        </div>
       </div>
 
       <div className={styles.gridContainer}>
         
-        {/* Label perfectly anchored to Column 1 */}
         <div className={styles.labelCol}>
           <span className={styles.metaLabel}>{t.label}</span>
         </div>
@@ -125,7 +123,6 @@ export default function Hero() {
           </h1>
         </div>
 
-        {/* Subtitle mechanically indented at Column 6 to 10 */}
         <div className={styles.subtitleCol}>
           <p ref={subtitleRef} className={`${styles.subtitle} js-hero-subtitle`}>
             {t.subtitle}
