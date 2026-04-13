@@ -135,8 +135,6 @@ export default function Services() {
                       fill
                       sizes="100vw"
                       quality={85}
-                      priority={(i === 0 || i === 3)}
-                      loading={(i === 0 || i === 3) ? 'eager' : 'lazy'}
                       className={styles.serviceImage}
                     />
                     <div className={styles.imageOverlay} aria-hidden="true" />

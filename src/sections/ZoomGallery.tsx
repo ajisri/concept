@@ -129,8 +129,6 @@ export default function ZoomGallery() {
                   alt={img.alt}
                   fill
                   sizes="(max-width: 768px) 80vw, 30vw"
-                  priority={i < 2}
-                  loading={i < 2 ? 'eager' : 'lazy'}
                   quality={75}
                 />
               </div>

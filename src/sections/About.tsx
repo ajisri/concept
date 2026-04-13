@@ -142,8 +142,6 @@ export default function About() {
               fill
               sizes="100vw"
               quality={85}
-              priority
-              loading="eager"
               className={styles.image}
             />
           </div>

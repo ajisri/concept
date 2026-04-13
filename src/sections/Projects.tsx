@@ -246,8 +246,6 @@ export default function Projects() {
                     alt={proj.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 25vw"
-                    priority={i < 6}
-                    loading={i < 6 ? 'eager' : 'lazy'}
                     quality={75}
                   />
                 </div>
