@@ -183,6 +183,8 @@
   position: absolute; /* Needed for GSAP x positioning */
   width: 400px;
   height: 200px;
+  top: 50%;
+  margin-top: -100px;
   overflow: hidden;
   flex-shrink: 0;
   border-radius: var(--radius-xs);
@@ -203,7 +205,7 @@
 @media (max-width: 968px) {
   .grid {
     grid-template-columns: 1fr;
-    gap: var(--sp-2xl);
+    gap: var(--sp-lg);
   }
   
   .imageWrapper {
@@ -212,5 +214,24 @@
   
   .title {
     font-size: clamp(3rem, 15vw, 6rem);
+  }
+
+  .infoCol {
+    padding-top: 0;
+    gap: var(--sp-lg);
+  }
+
+  .projectTicker {
+    order: -1;
+  }
+
+  .tickerTrack {
+    height: 180px;
+  }
+
+  .tickerImageWrapper {
+    width: 240px;
+    height: 120px;
+    margin-top: -60px;
   }
 }
