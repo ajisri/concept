@@ -119,10 +119,16 @@ export default function Navbar() {
     }, 400);
   };
 
+  // Scroll to top — replaces href="#" which triggers Chrome bounce tracking warnings
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <header ref={navRef} className={styles.navbar}>
       <div className={styles.inner}>
-        <a href="#" className={styles.logo} aria-label="Konstrüksi — Home">
+        <a href="/" className={styles.logo} aria-label="Konstrüksi — Home" onClick={handleLogoClick}>
           <span className={styles.logoAccent}>K</span>ONSTRÜKSI
         </a>
 
@@ -210,9 +216,9 @@ export default function Navbar() {
         <div className={styles.menuFooter}>
           <p className={styles.menuFooterText}>{t.footer}</p>
           <div className={styles.menuSocials}>
-            <a href="#" aria-label="Konstrüksi on Instagram">Instagram</a>
-            <a href="#" aria-label="Konstrüksi on LinkedIn">LinkedIn</a>
-            <a href="#" aria-label="Konstrüksi on Twitter">Twitter</a>
+            <a href="https://instagram.com/konstruksi" target="_blank" rel="noopener noreferrer" aria-label="Konstrüksi on Instagram">Instagram</a>
+            <a href="https://linkedin.com/company/konstruksi" target="_blank" rel="noopener noreferrer" aria-label="Konstrüksi on LinkedIn">LinkedIn</a>
+            <a href="https://twitter.com/konstruksi" target="_blank" rel="noopener noreferrer" aria-label="Konstrüksi on Twitter">Twitter</a>
           </div>
         </div>
       </div>

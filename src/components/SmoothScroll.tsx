@@ -102,8 +102,6 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
         // Critical: backface-visibility prevents "shimmering" text during skew
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
-        // will-change: transform enables GPU compositing — smoother skew
-        willChange: 'transform',
       }}
     >
       {children}

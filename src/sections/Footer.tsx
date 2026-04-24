@@ -11,6 +11,12 @@ export default function Footer() {
   const footerRef = useRef<HTMLDivElement>(null);
   const [footerHeight, setFooterHeight] = useState(0);
 
+  // Scroll to top — replaces href="#" which triggers Chrome bounce tracking warnings
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Measure footer height dynamically for the sticky reveal effect
   useEffect(() => {
     const updateHeight = () => {
@@ -47,7 +53,7 @@ export default function Footer() {
             <div className={styles.grid}>
             <div className={styles.brandCol}>
               <div>
-                <a href="#" className={styles.logo} aria-label="Konstrüksi Home">
+                <a href="/" className={styles.logo} aria-label="Konstrüksi Home" onClick={handleLogoClick}>
                   KONSTRÜKSI
                 </a>
                 <p className={styles.tagline}>
@@ -80,9 +86,9 @@ export default function Footer() {
 
             <div className={styles.linksCol}>
               <h4 className={styles.colTitle}>Social</h4>
-              <div className={styles.linkItem}><a href="#" className={styles.link}>Instagram</a></div>
-              <div className={styles.linkItem}><a href="#" className={styles.link}>LinkedIn</a></div>
-              <div className={styles.linkItem}><a href="#" className={styles.link}>Twitter</a></div>
+              <div className={styles.linkItem}><a href="https://instagram.com/konstruksi" target="_blank" rel="noopener noreferrer" className={styles.link}>Instagram</a></div>
+              <div className={styles.linkItem}><a href="https://linkedin.com/company/konstruksi" target="_blank" rel="noopener noreferrer" className={styles.link}>LinkedIn</a></div>
+              <div className={styles.linkItem}><a href="https://twitter.com/konstruksi" target="_blank" rel="noopener noreferrer" className={styles.link}>Twitter</a></div>
               <div className={styles.linkItem}><a href="mailto:hello@konstruksi.com" className={styles.link}>Email</a></div>
             </div>
           </div>

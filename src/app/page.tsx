@@ -1,12 +1,20 @@
+import dynamic from 'next/dynamic';
+
+// ─── Above the fold — static imports (critical rendering path) ───
 import Hero from '@/sections/Hero';
 import Marquee from '@/sections/Marquee';
-import About from '@/sections/About';
-import Projects from '@/sections/Projects';
-import ZoomGallery from '@/sections/ZoomGallery';
-import Services from '@/sections/Services';
-import Testimonials from '@/sections/Testimonials';
-import CTA from '@/sections/CTA';
-import Footer from '@/sections/Footer';
+
+// ─── Below the fold — dynamic imports (deferred from initial JS bundle) ───
+// These sections are never visible during initial viewport paint.
+// Dynamic importing removes their GSAP + ScrollTrigger initialization from
+// the main thread's hydration task, directly reducing Total Blocking Time.
+const About = dynamic(() => import('@/sections/About'));
+const Projects = dynamic(() => import('@/sections/Projects'));
+const ZoomGallery = dynamic(() => import('@/sections/ZoomGallery'));
+const Services = dynamic(() => import('@/sections/Services'));
+const Testimonials = dynamic(() => import('@/sections/Testimonials'));
+const CTA = dynamic(() => import('@/sections/CTA'));
+const Footer = dynamic(() => import('@/sections/Footer'));
 
 // JSON-LD Structured Data (Server Component — no bundle cost)
 const structuredData = {

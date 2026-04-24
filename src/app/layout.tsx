@@ -1,12 +1,17 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import dynamic from 'next/dynamic';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
-import CustomCursor from '@/components/CustomCursor';
-import PageCurtain from '@/components/PageCurtain';
 import Preloader from '@/components/Preloader';
 import Navbar from '@/components/Navbar';
-import BackgroundTransition from '@/components/BackgroundTransition';
+
+// ─── Decorative components — deferred from initial hydration ───
+// Dynamic import code-splits these into separate chunks, removing their
+// GSAP initialization from the main hydration long task → lower TBT.
+const CustomCursor = dynamic(() => import('@/components/CustomCursor'));
+const PageCurtain = dynamic(() => import('@/components/PageCurtain'));
+const BackgroundTransition = dynamic(() => import('@/components/BackgroundTransition'));
 
 // Inter is a variable font — no weight needed
 const inter = Inter({
@@ -70,7 +75,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body suppressHydrationWarning>
         {/* Fixed UI elements must NOT be inside the SmoothScroll transformed wrapper */}
         <Preloader />

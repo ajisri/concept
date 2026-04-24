@@ -9,6 +9,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Ensures only used GSAP/Lenis exports are bundled — critical for tree-shaking
+    optimizePackageImports: ['gsap', 'lenis'],
+  },
   images: {
     // Allow AVIF + WebP — best compression for Awwwards-level performance
     formats: ['image/avif', 'image/webp'],
